@@ -45,13 +45,15 @@ class PlayState extends FlxState
 		}
 		//objectLayer.add(planets);
 		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
-		//backgroundLayer.add(starfield);
+		backgroundLayer.add(starfield);
 
 
 		var player:Player = new Player(0,0);
 		player.screenCenter();
 		player.y = FlxG.height - player.height - 50;
 		objectLayer.add(player);
+		
+		objectLayer.add(new Cop(50, 50));
 
 		
 		slingShotHud = new SlingShotHud(player);
