@@ -20,6 +20,8 @@ class Asteroid extends FlxSprite
 		super(X, Y, AssetPaths.ASS_Troid__png);
 		this.xBounds = XBounds;
 		angle = FlxG.random.float(0, 360);
+		angularVelocity = FlxG.random.float(5, 20);
+		pixelPerfectRender = false;
 	}
 	
 	override public function update(elapsed:Float):Void 

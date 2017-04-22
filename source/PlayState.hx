@@ -131,7 +131,7 @@ class PlayState extends FlxState
 			planetToPlayer = FlxAngle.getPolarCoords(planetToPlayer.x, planetToPlayer.y);
 
 			var actualPlanetSize:Int = Std.int(planet._size * 0.5);
-			if(planetToPlayer.x > actualPlanetSize){
+			if(planetToPlayer.x > actualPlanetSize && planet._type == "home"){
 				return;
 			}
 
