@@ -11,7 +11,7 @@ class Planet extends FlxSprite{
 	
 	public function new (x:Float, y:Float, size:Int, rotationSpeed:Float){
 		super(x, y);
-		var color:FlxColor = FlxColor.fromHSL(1, 1.0, (size - 20) / 40.0, 1);
+		var color:FlxColor = FlxColor.fromHSL(1, 0.0, (size - 20) / 40.0, 1);
 		makeGraphic(size, size, color);
 		_size = size;
 		_rotationSpeed = rotationSpeed;
