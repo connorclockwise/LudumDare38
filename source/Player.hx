@@ -1,7 +1,8 @@
 package;
 
 import flixel.FlxSprite;
-import flixel.util.FlxColor;
+import flixel.math.FlxAngle;
+import flixel.math.FlxPoint;
 
 class Player extends FlxSprite
 {
@@ -17,13 +18,15 @@ class Player extends FlxSprite
 		//makeGraphic(20, 50, FlxColor.WHITE);
 	}
 
-	public function handleSlingshot(){
-
+	public function handleSlingshot(launchVector:FlxPoint):Void{
+		var polarCoords:FlxPoint = FlxAngle.getPolarCoords(launchVector.x, launchVector.y);
+		angle = polarCoords.y += 90;
+		launchVector.scale(8);
+		velocity.copyFrom(launchVector);
 	}
 	
 	override public function update(elapsed:Float) 
 	{
 		super.update(elapsed);
-		handleSlingshot();
 	}
 }
