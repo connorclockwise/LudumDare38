@@ -22,12 +22,12 @@ class Planet extends FlxSprite{
 		//makeGraphic(size, size, color);
 		//this.color = color;
 		_size = size;
-		_rotationSpeed = rotationSpeed;
+		//_rotationSpeed = rotationSpeed;
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		angle += _rotationSpeed * elapsed;
+		//angle += _rotationSpeed * elapsed;
 	}
 }

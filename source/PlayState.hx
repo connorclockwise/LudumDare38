@@ -25,6 +25,13 @@ class PlayState extends FlxState
 
 	public var levelBounds:FlxPoint = new FlxPoint(FlxG.width * 1.1, FlxG.height * 10);
 	
+	public var asteroidBoundarySpacing:Int = 2000;
+	public var asteroidBounds:FlxPoint;
+	public var asteroidPool:FlxTypedGroup<Asteroid>;
+	public var boundaryAsteroids:FlxGroup;
+	public var boundaryPosition:Int = 0; //0 is on the left, 1 is on the right.
+	public var asteroidBeltWidth:Float;
+	
 	override public function create():Void
 	{
 		super.create();
@@ -56,14 +63,30 @@ class PlayState extends FlxState
 		player.screenCenter();
 		player.y = FlxG.height - player.height - 50;
 		objectLayer.add(player);
+		
+		asteroidBounds = new FlxPoint(player.x - asteroidBoundarySpacing/2, player.x + asteroidBoundarySpacing/2);
 
+		//Asteroid pool
+		asteroidPool = new FlxTypedGroup<Asteroid>();
+		asteroidBeltWidth = FlxG.width * 0.8;
+		boundaryAsteroids = new FlxGroup();
+		for (i in 0...80) {
+			var asteroid:Asteroid = new Asteroid(0, 0, new FlxPoint(0, 0));
+			asteroidPool.add(asteroid);
+		}
+		objectLayer.add(asteroidPool);
+		asteroidPool.forEach(function(asteroid:Asteroid):Void {
+			asteroid.xBounds.set(asteroidBounds.x-asteroidBeltWidth, asteroidBounds.x);
+			asteroid.fullReset();
+		});
+		
 		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
 		backgroundLayer.add(starfield);
 		
-		// objectLayer.add(new Asteroid(100, 50));
-		// objectLayer.add(new Cop(50, 50));
-		// objectLayer.add(new Booster(150, 50));
-		// objectLayer.add(new GasCan(200, 50));
+		 objectLayer.add(new Asteroid(100, 50, new FlxPoint(0, FlxG.width/2)));
+		 objectLayer.add(new Cop(50, 50));
+		 objectLayer.add(new Booster(150, 50));
+		 objectLayer.add(new GasCan(200, 50));
 		objectLayer.add(new Planet(250, 50, 0, 0, "life"));
 		objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
 		
@@ -84,6 +107,8 @@ class PlayState extends FlxState
 		add(objectLayer);
 		add(effectLayer);
 		add(uiLayer);
+		
+		GlobalRegistry.effectLayer = effectLayer;
 	}
 
 	public function handleSlingshot(launchVector:FlxPoint):Void{
@@ -92,8 +117,8 @@ class PlayState extends FlxState
 	}
 
 	public function handleCollision(p:Player, _):Void{
-		if( Std.is(_, Planet)){
-			var planet:Planet = _;
+		if ( Std.is(_, Planet) ) {
+			var planet:Planet = cast (_, Planet);
 			var planetToPlayer:FlxPoint = new FlxPoint().copyFrom(p.getMidpoint());
 			planetToPlayer.subtractPoint(planet.getMidpoint());
 			planetToPlayer = FlxAngle.getPolarCoords(planetToPlayer.x, planetToPlayer.y);
@@ -109,11 +134,15 @@ class PlayState extends FlxState
 
 			planet.kill();
 		}
+		
+		if (Std.is(_, Asteroid)) {
+			cast(_, Asteroid).kill();
+		}
 	}
 
 	public function updateStarfieldSpeed(){
-		starfield.speed.x = player.velocity.x;
-		starfield.speed.y = player.velocity.y;
+		starfield.speed.x = -player.velocity.x;
+		starfield.speed.y = -player.velocity.y;
 	}
 
 	override public function update(elapsed:Float):Void
@@ -127,5 +156,23 @@ class PlayState extends FlxState
 			FlxG.worldBounds.height
 		);
 		updateStarfieldSpeed();
+		if (FlxG.camera.scroll.x < asteroidBounds.x + 70) {
+			if (boundaryPosition != 0) {
+				boundaryPosition = 0;
+				asteroidPool.forEach(function(asteroid:Asteroid):Void {
+					asteroid.xBounds.set(asteroidBounds.x-asteroidBeltWidth, asteroidBounds.x);
+					asteroid.fullReset();
+				});
+			}
+		}
+		if (FlxG.camera.scroll.x + FlxG.width > asteroidBounds.y) {
+			if (boundaryPosition != 1) {
+				boundaryPosition = 1;
+				asteroidPool.forEach(function(asteroid:Asteroid):Void {
+					asteroid.xBounds.set(asteroidBounds.y, asteroidBounds.y+asteroidBeltWidth);
+					asteroid.fullReset();
+				});
+			}
+		}
 	}
 }
