@@ -53,6 +53,7 @@ class PlayState extends FlxState
 		player.y = FlxG.height - player.height - 50;
 		objectLayer.add(player);
 		
+		objectLayer.add(new Asteroid(100, 50));
 		objectLayer.add(new Cop(50, 50));
 
 		
