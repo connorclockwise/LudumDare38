@@ -11,7 +11,6 @@ import flixel.math.FlxVector;
 class PlayState extends FlxState
 {
 	public var starfield:FlxStarfield;
-	public var planets:FlxTypedGroup<Planet>;
 
 	public var slingShotHud:SlingShotHud;
 	
@@ -21,6 +20,8 @@ class PlayState extends FlxState
 	public var backgroundLayer:FlxGroup;
 
 	public var player:Player;
+
+	public var levelBounds:FlxPoint = new FlxPoint(FlxG.width * 1.1, FlxG.height * 10);
 	
 	override public function create():Void
 	{
@@ -30,31 +31,30 @@ class PlayState extends FlxState
 		objectLayer = new FlxGroup();
 		effectLayer = new FlxGroup();
 		backgroundLayer = new FlxGroup();
-		
-		planets = new FlxTypedGroup<Planet>();
 
 		var position:FlxPoint = new FlxPoint();
 		var size:Int;
 		var rotationSpeed:Float;
 		var planet:Planet;
+		var numPlanets:Int = 15;
 		
-		//for(i in 0...20){
-			//position.x = Std.int(FlxG.random.float() * FlxG.width);
-			//position.y = Std.int(FlxG.random.float() * FlxG.height);
-			//size = Std.int(FlxG.random.float(20, 60));
-			//rotationSpeed = FlxG.random.float(1, 4) * 100;
-//
-			//planet = new Planet(position.x, position.y, size, rotationSpeed);
-			//planets.add(planet);
-		//}
-		//objectLayer.add(planets);
-		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
-		backgroundLayer.add(starfield);
+		for(i in 0...numPlanets){
+			position.x = Std.int(FlxG.random.float() * levelBounds.x);
+			position.y = Std.int((FlxG.random.float(-1, 1) * 40) - (i/numPlanets * levelBounds.y));
+			size = Std.int(FlxG.random.float(20, 60));
+			rotationSpeed = FlxG.random.float(1, 4) * 100;
+
+			planet = new Planet(position.x, position.y, size, rotationSpeed, "desert");
+			objectLayer.add(planet);
+		}
 
 		player = new Player(0,0);
 		player.screenCenter();
 		player.y = FlxG.height - player.height - 50;
 		objectLayer.add(player);
+
+		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
+		backgroundLayer.add(starfield);
 		
 		// objectLayer.add(new Asteroid(100, 50));
 		// objectLayer.add(new Cop(50, 50));
@@ -67,9 +67,6 @@ class PlayState extends FlxState
 		effectLayer.add(new ExplosionFX(120, 150, 2));
 		effectLayer.add(new ExplosionFX(180, 150, 3));
 		effectLayer.add(new ExplosionFX(230, 150, 4));
-
-
-		// objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
 		
 		slingShotHud = new SlingShotHud(player);
 		slingShotHud.launchSignal.addOnce(handleSlingshot);
@@ -86,9 +83,6 @@ class PlayState extends FlxState
 		player.handleSlingshot(launchVector);
 	}
 
-	public var angleDiff:Float;
-	public var resultantVelocity:FlxVector;
-
 	public function handleCollision(p:Player, _):Void{
 		if( Std.is(_, Planet)){
 			var planet:Planet = _;
@@ -99,9 +93,9 @@ class PlayState extends FlxState
 			velocityNorm.x = -velocityNorm.x;
 			velocityNorm.y = -velocityNorm.y;
 			velocityNorm = FlxAngle.getPolarCoords(velocityNorm.x, velocityNorm.y);
-			angleDiff = velocityNorm.y - planetToPlayer.y; 
+			var angleDiff:Float = velocityNorm.y - planetToPlayer.y; 
 
-			resultantVelocity = new FlxVector(p.velocity.x, p.velocity.y);
+			var resultantVelocity:FlxVector = new FlxVector(p.velocity.x, p.velocity.y);
 			resultantVelocity.rotateByDegrees(angleDiff);
 			p.handleImpulse(resultantVelocity);
 
@@ -109,9 +103,21 @@ class PlayState extends FlxState
 		}
 	}
 
+	public function updateStarfieldSpeed(){
+		starfield.speed.x = player.velocity.x;
+		starfield.speed.y = player.velocity.y;
+	}
+
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		FlxG.overlap(player, objectLayer, handleCollision);
+		FlxG.worldBounds.set(
+			player.x - FlxG.worldBounds.width / 2,
+			player.y - FlxG.worldBounds.height / 2,
+			FlxG.worldBounds.width,
+			FlxG.worldBounds.height
+		);
+		updateStarfieldSpeed();
 	}
 }

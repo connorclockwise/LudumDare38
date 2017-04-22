@@ -43,6 +43,7 @@ class FlxStarfield extends FlxSprite
 			starts.push(stars[i].prevPos);
 		}
 		makeGraphic(Std.int(Width), Std.int(Height), 0x0, true);
+		scrollFactor.set(0,0);
 	}
 	
 	override public function update(elapsed:Float) {
@@ -68,8 +69,6 @@ class FlxStarfield extends FlxSprite
 				star.prevPos.x += width; //Also back up the star
 			}
 		}
-		speed.x = (FlxG.mouse.x - FlxG.width/2) * 2;
-		speed.y = (FlxG.mouse.y - FlxG.height/2) * 2;
 		super.update(elapsed);
 	}
 	
