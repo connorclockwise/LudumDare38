@@ -63,7 +63,6 @@ class CollisionIndicatorHud extends FlxTypedGroup<FlxSprite>
 			playerToPlanet = FlxAngle.getPolarCoords(playerToPlanet.x, playerToPlanet.y);
 
 			size = Math.max( 1 - (Math.min(Math.max(playerToPlanet.x, 40), 1000) - 40) / 960.0, 0.2);
-			FlxG.log.add(size);
 			playerToPlanet = FlxAngle.getCartesianCoords(100, playerToPlanet.y);
 			_arrows.members[i].x = playerToPlanet.x + playerMidpoint.x;
 			_arrows.members[i].y = playerToPlanet.y + playerMidpoint.y;
