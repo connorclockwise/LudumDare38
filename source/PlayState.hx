@@ -10,6 +10,8 @@ class PlayState extends FlxState
 {
 	public var starfield:FlxStarfield;
 	public var planets:FlxTypedGroup<Planet>;
+
+	public var slingShotHud:SlingShotHud;
 	
 	public var uiLayer:FlxGroup;
 	public var objectLayer:FlxGroup;
@@ -41,10 +43,19 @@ class PlayState extends FlxState
 			planet = new Planet(position.x, position.y, size, rotationSpeed);
 			planets.add(planet);
 		}
-		
-		objectLayer.add(planets);
+		//objectLayer.add(planets);
 		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
-		backgroundLayer.add(starfield);
+		//backgroundLayer.add(starfield);
+
+
+		var player:Player = new Player(0,0);
+		player.screenCenter();
+		player.y = FlxG.height - player.height - 50;
+		objectLayer.add(player);
+
+		
+		slingShotHud = new SlingShotHud(player);
+		uiLayer.add(slingShotHud);
 		
 		add(backgroundLayer);
 		add(objectLayer);

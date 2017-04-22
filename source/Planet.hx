@@ -8,6 +8,7 @@ class Planet extends FlxSprite{
 
 	public var _size:Int;
 	public var _rotationSpeed:Float;
+	public var _reticule:FlxSprite;
 	
 	public function new (x:Float, y:Float, size:Int, rotationSpeed:Float){
 		super(x, y, AssetPaths.Kelstar__png);
