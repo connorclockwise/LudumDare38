@@ -8,6 +8,8 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
+import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 
 class PlayState extends FlxState
 {
@@ -58,6 +60,10 @@ class PlayState extends FlxState
 			planets.add(planet);
 			objectLayer.add(planet);
 		}
+
+		var homePlanet:Planet = new Planet(levelBounds.x / 2, - 800, 500, 0, "home");
+		planets.add(homePlanet);
+		objectLayer.add(homePlanet);
 
 		player = new Player(0,0);
 		player.screenCenter();
@@ -122,6 +128,26 @@ class PlayState extends FlxState
 			var planetToPlayer:FlxPoint = new FlxPoint().copyFrom(p.getMidpoint());
 			planetToPlayer.subtractPoint(planet.getMidpoint());
 			planetToPlayer = FlxAngle.getPolarCoords(planetToPlayer.x, planetToPlayer.y);
+
+			var actualPlanetSize:Int = Std.int(planet._size * 0.5);
+			if(planetToPlayer.x > actualPlanetSize){
+				return;
+			}
+
+			if(planet._type == "home"){
+				FlxG.camera.flash(FlxColor.WHITE, 1);
+				new FlxTimer().start(0.5, function(_){
+					effectLayer.add(new ExplosionFX(player.x + 5, player.y -3, 3));
+				});
+				new FlxTimer().start(0.55, function(_){
+					effectLayer.add(new ExplosionFX(player.x - 10, player.y + 5, 1));
+				});
+				new FlxTimer().start(0.65, function(_){
+					effectLayer.add(new ExplosionFX(player.x + 5, player.y + 8, 2));
+				});
+				player.kill();
+				return;
+			}
 			var velocityNorm:FlxPoint = new FlxPoint().copyFrom(p.velocity);
 			velocityNorm.x = -velocityNorm.x;
 			velocityNorm.y = -velocityNorm.y;

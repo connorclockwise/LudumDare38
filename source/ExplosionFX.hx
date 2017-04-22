@@ -51,5 +51,5 @@ class ExplosionFX extends FlxSprite
 			kill();
 		}
 	}
-	
+
 }
