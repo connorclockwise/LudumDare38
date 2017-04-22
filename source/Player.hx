@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxAngle;
+import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 
@@ -10,6 +11,7 @@ class Player extends FlxSprite
 {
 
 	public var _reticule:FlxSprite;
+	public var _helperVector:FlxVector;
 
 	public function new(X:Float, Y:Float) 
 	{
@@ -17,11 +19,16 @@ class Player extends FlxSprite
 		loadGraphic(AssetPaths.Junker__png, true, 32, 64);
 		animation.add("pulse", [0, 1, 2, 3, 4], 15);
 		animation.play("pulse");
+		_helperVector = new FlxVector();
 		//makeGraphic(20, 50, FlxColor.WHITE);
 	}
 
-	public function handleImpulse(newVelocity:FlxPoint){
-		velocity.copyFrom(newVelocity);
+	public function handleImpulse(newVelocity:FlxPoint) {
+		_helperVector.copyFrom(newVelocity);
+		if (_helperVector.length > 900) {
+			_helperVector.length = 900;
+		}
+		velocity.copyFrom(_helperVector);
 		var polarCoords:FlxPoint = FlxAngle.getPolarCoords(newVelocity.x, newVelocity.y);
 		angle = polarCoords.y += 90;
 	}
@@ -33,12 +40,16 @@ class Player extends FlxSprite
 
 	public function handleInput(){
 
-		var resultantVelocity:FlxVector = new FlxVector(velocity.x, velocity.y);
+		var _helperVector:FlxVector = new FlxVector(velocity.x, velocity.y);
 		if(FlxG.keys.anyPressed([LEFT, A])){
-			resultantVelocity.rotateByDegrees(-1.5);
+			_helperVector.rotateByDegrees(-1.5);
 		}
 		if(FlxG.keys.anyPressed([RIGHT, D])){
-			resultantVelocity.rotateByDegrees(1.5);
+			_helperVector.rotateByDegrees(1.5);
+		}
+		if (FlxG.keys.anyPressed([UP, W])) {
+			//TODO: Consume fuel
+			_helperVector.length = Math.sqrt(_helperVector.lengthSquared + 2500);
 		}
 
 		#if FLX_DEBUG
@@ -58,7 +69,7 @@ class Player extends FlxSprite
 		}
 		#end
 
-		handleImpulse(resultantVelocity);
+		handleImpulse(_helperVector);
 	}
 	
 	override public function update(elapsed:Float) 

@@ -6,8 +6,10 @@ import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.group.FlxGroup;
 import flixel.math.FlxAngle;
+import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 
@@ -16,6 +18,8 @@ class PlayState extends FlxState
 	public var starfield:FlxStarfield;
 
 	public var slingShotHud:SlingShotHud;
+	
+	public var speedText:FlxText;
 	
 	public var uiLayer:FlxGroup;
 	public var objectLayer:FlxGroup;
@@ -53,7 +57,7 @@ class PlayState extends FlxState
 		for(i in 0...numPlanets){
 			position.x = Std.int(FlxG.random.float() * levelBounds.x);
 			position.y = Std.int((FlxG.random.float(-1, 1) * 40) - (i/numPlanets * levelBounds.y));
-			size = Std.int(FlxG.random.float(35, 60));
+			size = Std.int(FlxG.random.float(90, 118));
 			rotationSpeed = FlxG.random.float(1, 4) * 100;
 
 			planet = new Planet(position.x, position.y, size, rotationSpeed, "desert");
@@ -64,11 +68,13 @@ class PlayState extends FlxState
 		var homePlanet:Planet = new Planet(levelBounds.x / 2, - 800, 500, 0, "home");
 		planets.add(homePlanet);
 		objectLayer.add(homePlanet);
+		GlobalRegistry.home = homePlanet;
 
 		player = new Player(0,0);
 		player.screenCenter();
 		player.y = FlxG.height - player.height - 50;
 		objectLayer.add(player);
+		GlobalRegistry.player = player;
 		
 		asteroidBounds = new FlxPoint(player.x - asteroidBoundarySpacing/2, player.x + asteroidBoundarySpacing/2);
 
@@ -116,6 +122,10 @@ class PlayState extends FlxState
 		
 		GlobalRegistry.effectLayer = effectLayer;
 		FlxG.watch.add(effectLayer.members, "length", "Explosion Pool Count");
+		
+		speedText = new FlxText(0, 0, 100, "SPEED: ");
+		speedText.scrollFactor.set(0, 0);
+		uiLayer.add(speedText);
 	}
 
 	public function handleSlingshot(launchVector:FlxPoint):Void{
@@ -214,5 +224,6 @@ class PlayState extends FlxState
 				});
 			}
 		}
+		speedText.text = "SPEED: " + Math.floor(new FlxVector(player.velocity.x, player.velocity.y).length);
 	}
 }
