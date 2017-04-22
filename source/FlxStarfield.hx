@@ -59,7 +59,4 @@ class FlxStarfield extends FlxSprite
 		pixels.unlock();
 		super.draw();
 	}
-	
-	
-	
 }
