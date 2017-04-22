@@ -59,6 +59,8 @@ class PlayState extends FlxState
 		objectLayer.add(new GasCan(200, 50));
 		objectLayer.add(new Planet(250, 50, 0, 0, "life"));
 		objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
+		
+		effectLayer.add(new ExplosionFX(50, 150));
 
 		
 		slingShotHud = new SlingShotHud(player);
