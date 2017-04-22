@@ -1,4 +1,8 @@
 *.sublime-workspace
 *.sublime-project
+<<<<<<< Updated upstream
 export/
 *.hxproj
+=======
+exports/
+>>>>>>> Stashed changes
