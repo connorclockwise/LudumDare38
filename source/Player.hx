@@ -43,7 +43,7 @@ class Player extends FlxSprite
 		var _helperVector:FlxVector = new FlxVector(velocity.x, velocity.y);
 		
 		var velocityMag = FlxAngle.getPolarCoords(velocity.x, velocity.y).x; 
-		var amountToTurn:Float = 1.5 * ( Math.min(velocityMag, 10.0) / 10.0);
+		var amountToTurn:Float = FlxG.random.float(-2, 4) * ( Math.min(velocityMag, 200.0) / 200.0);
 	
 		if(FlxG.keys.anyPressed([LEFT, A])){
 			_helperVector.rotateByDegrees(-amountToTurn);
