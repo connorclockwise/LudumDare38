@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.group.FlxGroup;
@@ -16,6 +17,7 @@ class PlayState extends FlxState
 	
 	public var uiLayer:FlxGroup;
 	public var objectLayer:FlxGroup;
+	public var planets:FlxTypedGroup<FlxSprite>;
 	public var effectLayer:FlxGroup;
 	public var backgroundLayer:FlxGroup;
 
@@ -32,6 +34,7 @@ class PlayState extends FlxState
 		effectLayer = new FlxGroup();
 		backgroundLayer = new FlxGroup();
 
+		planets = new FlxTypedGroup<FlxSprite>();
 		var position:FlxPoint = new FlxPoint();
 		var size:Int;
 		var rotationSpeed:Float;
@@ -45,6 +48,7 @@ class PlayState extends FlxState
 			rotationSpeed = FlxG.random.float(1, 4) * 100;
 
 			planet = new Planet(position.x, position.y, size, rotationSpeed, "desert");
+			planets.add(planet);
 			objectLayer.add(planet);
 		}
 
@@ -71,6 +75,10 @@ class PlayState extends FlxState
 		slingShotHud = new SlingShotHud(player);
 		slingShotHud.launchSignal.addOnce(handleSlingshot);
 		uiLayer.add(slingShotHud);
+
+		var collisionIndicatorHud:CollisionIndicatorHud;
+		collisionIndicatorHud = new CollisionIndicatorHud(player, planets);
+		uiLayer.add(collisionIndicatorHud);
 		
 		add(backgroundLayer);
 		add(objectLayer);
