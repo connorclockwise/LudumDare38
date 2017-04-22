@@ -100,7 +100,7 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 	        _slingshotTimer.start(0.1, allowReleaseSlingshot, 0);
 
 	    	_slingshotStart = FlxG.mouse.getWorldPosition();
-	    	_slingshotPointer.setPosition(_slingshotStart.x, _slingshotStart.y);
+	    	_slingshotPointer.setPosition(_slingshotStart.x - _slingshotPointer.width /2, _slingshotStart.y);
 	    	_slingShotPointAngle = FlxAngle.angleBetweenPoint( _player, _slingshotStart, true);
 	    	_slingShotPointAngle += 90;
 	    	_slingshotPointer.angle = _slingShotPointAngle;

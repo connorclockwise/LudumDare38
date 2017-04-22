@@ -1,11 +1,12 @@
 package;
 
-import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.group.FlxGroup;
+import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
+import flixel.math.FlxVector;
 
 class PlayState extends FlxState
 {
@@ -50,18 +51,17 @@ class PlayState extends FlxState
 		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
 		backgroundLayer.add(starfield);
 
-
 		player = new Player(0,0);
 		player.screenCenter();
 		player.y = FlxG.height - player.height - 50;
 		objectLayer.add(player);
 		
-		objectLayer.add(new Asteroid(100, 50));
-		objectLayer.add(new Cop(50, 50));
-		objectLayer.add(new Booster(150, 50));
-		objectLayer.add(new GasCan(200, 50));
+		// objectLayer.add(new Asteroid(100, 50));
+		// objectLayer.add(new Cop(50, 50));
+		// objectLayer.add(new Booster(150, 50));
+		// objectLayer.add(new GasCan(200, 50));
 		objectLayer.add(new Planet(250, 50, 0, 0, "life"));
-		objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
+		// objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
 		
 		slingShotHud = new SlingShotHud(player);
 		slingShotHud.launchSignal.addOnce(handleSlingshot);
@@ -78,8 +78,32 @@ class PlayState extends FlxState
 		player.handleSlingshot(launchVector);
 	}
 
+	public var angleDiff:Float;
+	public var resultantVelocity:FlxVector;
+
+	public function handleCollision(p:Player, _):Void{
+		if( Std.is(_, Planet)){
+			var planet:Planet = _;
+			var planetToPlayer:FlxPoint = new FlxPoint().copyFrom(p.getMidpoint());
+			planetToPlayer.subtractPoint(planet.getMidpoint());
+			planetToPlayer = FlxAngle.getPolarCoords(planetToPlayer.x, planetToPlayer.y);
+			var velocityNorm:FlxPoint = new FlxPoint().copyFrom(p.velocity);
+			velocityNorm.x = -velocityNorm.x;
+			velocityNorm.y = -velocityNorm.y;
+			velocityNorm = FlxAngle.getPolarCoords(velocityNorm.x, velocityNorm.y);
+			angleDiff = velocityNorm.y - planetToPlayer.y; 
+
+			resultantVelocity = new FlxVector(p.velocity.x, p.velocity.y);
+			resultantVelocity.rotateByDegrees(angleDiff);
+			p.handleImpulse(resultantVelocity);
+
+			planet.kill();
+		}
+	}
+
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		FlxG.overlap(player, objectLayer, handleCollision);
 	}
 }
