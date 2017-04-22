@@ -11,7 +11,10 @@ class Player extends FlxSprite
 	public function new(X:Float, Y:Float) 
 	{
 		super(X, Y);
-		makeGraphic(20, 50, FlxColor.WHITE);
+		loadGraphic(AssetPaths.Junker__png, true, 32, 64);
+		animation.add("pulse", [0, 1, 2, 3, 4], 15);
+		animation.play("pulse");
+		//makeGraphic(20, 50, FlxColor.WHITE);
 	}
 
 	public function handleSlingshot(){
