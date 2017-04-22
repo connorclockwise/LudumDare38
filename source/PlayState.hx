@@ -31,7 +31,7 @@ class PlayState extends FlxState
 		var size:Int;
 		var rotationSpeed:Float;
 		var planet:Planet;
-
+		
 		for(i in 0...20){
 			position.x = Std.int(FlxG.random.float() * FlxG.width);
 			position.y = Std.int(FlxG.random.float() * FlxG.height);
