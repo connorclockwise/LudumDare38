@@ -41,11 +41,15 @@ class Player extends FlxSprite
 	public function handleInput(){
 
 		var _helperVector:FlxVector = new FlxVector(velocity.x, velocity.y);
+		
+		var velocityMag = FlxAngle.getPolarCoords(velocity.x, velocity.y).x; 
+		var amountToTurn:Float = 1.5 * ( Math.min(velocityMag, 10.0) / 10.0);
+	
 		if(FlxG.keys.anyPressed([LEFT, A])){
-			_helperVector.rotateByDegrees(-1.5);
+			_helperVector.rotateByDegrees(-amountToTurn);
 		}
 		if(FlxG.keys.anyPressed([RIGHT, D])){
-			_helperVector.rotateByDegrees(1.5);
+			_helperVector.rotateByDegrees(amountToTurn);
 		}
 		if (FlxG.keys.anyPressed([UP, W])) {
 			//TODO: Consume fuel
