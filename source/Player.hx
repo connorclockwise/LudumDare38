@@ -16,6 +16,7 @@ class Player extends FlxSprite
 		loadGraphic(AssetPaths.Junker__png, true, 32, 64);
 		animation.add("pulse", [0, 1, 2, 3, 4], 15);
 		animation.play("pulse");
+		
 		//makeGraphic(20, 50, FlxColor.WHITE);
 	}
 
@@ -33,5 +34,22 @@ class Player extends FlxSprite
 	override public function update(elapsed:Float) 
 	{
 		super.update(elapsed);
+		
+		#if FLX_DEBUG
+		if (FlxG.keys.pressed.LEFT) {
+			this.velocity.x = -400;
+		}else if (FlxG.keys.pressed.RIGHT) {
+			this.velocity.x = 400;
+		}else {
+			this.velocity.x = 0;
+		}
+		if (FlxG.keys.pressed.UP) {
+			this.velocity.y = -400;
+		}else if (FlxG.keys.pressed.DOWN) {
+			this.velocity.y = 400;
+		}else {
+			this.velocity.y = 0;
+		}
+		#end
 	}
 }
