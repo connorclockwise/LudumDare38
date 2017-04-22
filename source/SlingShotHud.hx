@@ -4,19 +4,24 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.math.FlxAngle;
+import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
+import flixel.util.FlxSignal;
 import flixel.util.FlxTimer;
 
 class SlingShotHud extends FlxTypedGroup<FlxSprite>
 {
 	
+	public var launchSignal:FlxTypedSignal<FlxPoint->Void>;
+
 	public var _reticule:FlxSprite;
 	public var _reticuleTrail1:FlxSprite;
 	public var _reticuleTrail2:FlxSprite;
 
 	public var _slingshotStart:FlxPoint;
 	public var _slingshotEnd:FlxPoint;
+	public var _slingShotPointAngle:Float;
 	public var _slingshotPointer:FlxSprite;
 	public var _canReleaseSlingshot:Bool;
 	public var _slingshotTimer:FlxTimer;
@@ -25,6 +30,8 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 
 	public var _minOffset:Float = 50;
 	public var _maxOffset:Float = 300;
+
+	public var arrowSize:Int;
 
 	public function new (player:FlxSprite){
 		super();
@@ -39,7 +46,7 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 		_player = player;
 
 		_slingshotPointer = new FlxSprite(0,0);
-		_slingshotPointer.makeGraphic(20, 50, FlxColor.WHITE);
+		_slingshotPointer.makeGraphic(20, 1, FlxColor.WHITE);
 		_slingshotPointer.origin.set(10, 0);
 		_slingshotPointer.kill();
 
@@ -49,6 +56,8 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 		add(_reticuleTrail1);
 		add(_reticuleTrail2);
 		add(_slingshotPointer);
+
+		launchSignal = new FlxTypedSignal<FlxPoint->Void>();
 	}
 
 	public function positionAroundOrigin(){
@@ -88,26 +97,40 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 	    	_reticuleTrail1.kill();
 	    	_reticuleTrail2.kill();
 	    	_slingshotPointer.reset(0,0);
-	    	_slingshotPointer.width = 20;
 	        _slingshotTimer.start(0.1, allowReleaseSlingshot, 0);
 
 	    	_slingshotStart = FlxG.mouse.getWorldPosition();
-	    	_slingshotPointer.setPosition(_slingshotStart.x, _slingshotStart.y);
-	    	var slingShotPointAngle:Float = FlxAngle.angleBetweenPoint( _player, _slingshotStart, true);
-	    	slingShotPointAngle -= 90;
-	    	_slingshotPointer.angle = slingShotPointAngle;
+	    	_slingshotPointer.setPosition(_slingshotStart.x - _slingshotPointer.width /2, _slingshotStart.y);
+	    	_slingShotPointAngle = FlxAngle.angleBetweenPoint( _player, _slingshotStart, true);
+	    	_slingShotPointAngle += 90;
+	    	_slingshotPointer.angle = _slingShotPointAngle;
 	    }
 
 	    if (FlxG.mouse.pressed)
 	    {
 	    	_slingshotEnd = FlxG.mouse.getWorldPosition();
-			var toSlingShotEnd:FlxPoint = _slingshotStart.subtractPoint(_slingshotEnd);
+			var toSlingShotEnd:FlxPoint = new FlxPoint(
+				_slingshotStart.x - _slingshotEnd.x,
+				_slingshotStart.y - _slingshotEnd.y
+			);
+			var fromSlingToCar:FlxPoint = new FlxPoint().copyFrom(_player.getMidpoint());
+			fromSlingToCar.subtractPoint(_slingshotStart);
+			var dot:Float = FlxMath.dotProduct(-toSlingShotEnd.x, -toSlingShotEnd.y, 
+										  		fromSlingToCar.x, fromSlingToCar.y);
 			toSlingShotEnd = FlxAngle.getPolarCoords(toSlingShotEnd.x, toSlingShotEnd.y);
-	    	_slingshotPointer.scale.set(1, toSlingShotEnd.y/50);
+			if(dot > 0){
+				arrowSize = Std.int(toSlingShotEnd.x);
+		    	_slingshotPointer.setGraphicSize(20, arrowSize);
+			}
 	    }
 
 	    if (_canReleaseSlingshot && FlxG.mouse.justReleased)
 	    {
+	    	_slingshotPointer.kill();
+	    	var calculatedLaunch:FlxPoint = new FlxPoint();
+	    	calculatedLaunch.copyFrom(_slingshotStart);
+	    	calculatedLaunch.subtractPoint(_slingshotEnd);
+	    	launchSignal.dispatch(calculatedLaunch);
 	        // The left mouse button has just been released
 	    }
 	}

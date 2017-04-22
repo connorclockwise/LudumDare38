@@ -1,7 +1,9 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.util.FlxColor;
+import flixel.math.FlxAngle;
+import flixel.math.FlxPoint;
 
 class Player extends FlxSprite
 {
@@ -17,13 +19,19 @@ class Player extends FlxSprite
 		//makeGraphic(20, 50, FlxColor.WHITE);
 	}
 
-	public function handleSlingshot(){
+	public function handleImpulse(newVelocity:FlxPoint){
+		velocity.copyFrom(newVelocity);
+		var polarCoords:FlxPoint = FlxAngle.getPolarCoords(newVelocity.x, newVelocity.y);
+		angle = polarCoords.y += 90;
+	}
 
+	public function handleSlingshot(launchVector:FlxPoint):Void{
+		launchVector.scale(4);
+		handleImpulse(launchVector);
 	}
 	
 	override public function update(elapsed:Float) 
 	{
 		super.update(elapsed);
-		handleSlingshot();
 	}
 }
