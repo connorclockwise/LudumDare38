@@ -55,6 +55,8 @@ class PlayState extends FlxState
 		
 		objectLayer.add(new Asteroid(100, 50));
 		objectLayer.add(new Cop(50, 50));
+		objectLayer.add(new Booster(150, 50));
+		objectLayer.add(new GasCan(200, 50));
 
 		
 		slingShotHud = new SlingShotHud(player);
