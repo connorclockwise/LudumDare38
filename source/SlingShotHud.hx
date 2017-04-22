@@ -17,7 +17,9 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 	public function new (player:FlxSprite){
 		super();
 		_reticule = new FlxSprite(0, 0);
-		_reticule.makeGraphic(16, 16, FlxColor.WHITE);
+		_reticule.loadGraphic(AssetPaths.Reticle__png, true, 16, 16);
+		_reticule.animation.add("pulse", [0, 1, 2, 3, 4, 5, 6, 7], 20);
+		_reticule.animation.play("pulse");
 		_player = player;
 
 		add(_reticule);
@@ -32,7 +34,8 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 
 	}
 
-	override public function update (estimated:Float){
+	override public function update (elapsed:Float){
 		positionAroundOrigin();
+		super.update(elapsed);
 	}
 }
