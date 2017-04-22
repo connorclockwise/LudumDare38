@@ -10,11 +10,17 @@ class Planet extends FlxSprite{
 	public var _rotationSpeed:Float;
 	public var _reticule:FlxSprite;
 	
-	public function new (x:Float, y:Float, size:Int, rotationSpeed:Float){
-		super(x, y, AssetPaths.Kelstar__png);
-		var color:FlxColor = FlxColor.fromHSL(1, 0.0, (size - 20) / 40.0, 1);
+	public function new (x:Float, y:Float, size:Int, rotationSpeed:Float, type:String){
+		super(x, y);
+		switch(type) {
+			case "life":
+				loadGraphic(AssetPaths.Planet_Life__png);
+			default:
+				loadGraphic(AssetPaths.Planet_Desert__png);
+		}
+		//var color:FlxColor = FlxColor.fromHSL(1, 0.0, (size - 20) / 40.0, 1);
 		//makeGraphic(size, size, color);
-		this.color = color;
+		//this.color = color;
 		_size = size;
 		_rotationSpeed = rotationSpeed;
 	}

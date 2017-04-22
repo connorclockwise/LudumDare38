@@ -34,15 +34,15 @@ class PlayState extends FlxState
 		var rotationSpeed:Float;
 		var planet:Planet;
 		
-		for(i in 0...20){
-			position.x = Std.int(FlxG.random.float() * FlxG.width);
-			position.y = Std.int(FlxG.random.float() * FlxG.height);
-			size = Std.int(FlxG.random.float(20, 60));
-			rotationSpeed = FlxG.random.float(1, 4) * 100;
-
-			planet = new Planet(position.x, position.y, size, rotationSpeed);
-			planets.add(planet);
-		}
+		//for(i in 0...20){
+			//position.x = Std.int(FlxG.random.float() * FlxG.width);
+			//position.y = Std.int(FlxG.random.float() * FlxG.height);
+			//size = Std.int(FlxG.random.float(20, 60));
+			//rotationSpeed = FlxG.random.float(1, 4) * 100;
+//
+			//planet = new Planet(position.x, position.y, size, rotationSpeed);
+			//planets.add(planet);
+		//}
 		//objectLayer.add(planets);
 		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
 		backgroundLayer.add(starfield);
@@ -57,6 +57,8 @@ class PlayState extends FlxState
 		objectLayer.add(new Cop(50, 50));
 		objectLayer.add(new Booster(150, 50));
 		objectLayer.add(new GasCan(200, 50));
+		objectLayer.add(new Planet(250, 50, 0, 0, "life"));
+		objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
 
 		
 		slingShotHud = new SlingShotHud(player);
