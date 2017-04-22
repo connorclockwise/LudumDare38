@@ -73,7 +73,9 @@ class Player extends FlxSprite
 		}
 		#end
 
-		handleImpulse(_helperVector);
+		if(velocity.x != 0 && velocity.y != 0){
+			handleImpulse(_helperVector);
+		}
 	}
 	
 	override public function update(elapsed:Float) 

@@ -18,6 +18,7 @@ class PlayState extends FlxState
 	public var starfield:FlxStarfield;
 
 	public var slingShotHud:SlingShotHud;
+	public var collisionIndicatorHud:CollisionIndicatorHud;
 	
 	public var speedText:FlxText;
 	
@@ -111,7 +112,6 @@ class PlayState extends FlxState
 		slingShotHud.launchSignal.addOnce(handleSlingshot);
 		uiLayer.add(slingShotHud);
 
-		var collisionIndicatorHud:CollisionIndicatorHud;
 		collisionIndicatorHud = new CollisionIndicatorHud(player, planets);
 		uiLayer.add(collisionIndicatorHud);
 		
@@ -131,6 +131,7 @@ class PlayState extends FlxState
 	public function handleSlingshot(launchVector:FlxPoint):Void{
 		FlxG.camera.follow(player);
 		player.handleSlingshot(launchVector);
+		slingShotHud.kill();
 	}
 
 	public function handleCollision(p:Player, _):Void{
@@ -147,6 +148,8 @@ class PlayState extends FlxState
 
 			if(planet._type == "home"){
 				FlxG.camera.flash(FlxColor.WHITE, 1);
+				collisionIndicatorHud.kill();
+				player.kill();
 				new FlxTimer().start(0.3, function(_){
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y -3, 3));
 				});
@@ -156,14 +159,17 @@ class PlayState extends FlxState
 				new FlxTimer().start(0.5, function(_){
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y + 8, 2));
 				});
-				player.kill();
+				new FlxTimer().start(3.0, function(_){
+					FlxG.switchState(new GameOverState(true));
+				});
 				return;
 			}
 			var velocityNorm:FlxPoint = new FlxPoint().copyFrom(p.velocity);
 			velocityNorm.x = -velocityNorm.x;
 			velocityNorm.y = -velocityNorm.y;
 			velocityNorm = FlxAngle.getPolarCoords(velocityNorm.x, velocityNorm.y);
-			var angleDiff:Float = velocityNorm.y - planetToPlayer.y; 
+			var angleDiff:Float = FlxAngle.wrapAngle(velocityNorm.y - planetToPlayer.y);
+			angleDiff = Math.min(Math.max(angleDiff, -30), 30);
 
 			var resultantVelocity:FlxVector = new FlxVector(p.velocity.x, p.velocity.y);
 			resultantVelocity.rotateByDegrees(angleDiff);
