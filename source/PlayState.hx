@@ -36,11 +36,12 @@ class PlayState extends FlxState
 			position.x = Std.int(FlxG.random.float() * FlxG.width);
 			position.y = Std.int(FlxG.random.float() * FlxG.height);
 			size = Std.int(FlxG.random.float(20, 60));
-			rotationSpeed = FlxG.random.float(1, 4);
+			rotationSpeed = FlxG.random.float(1, 4) * 100;
 
 			planet = new Planet(position.x, position.y, size, rotationSpeed);
 			planets.add(planet);
 		}
+		
 		objectLayer.add(planets);
 		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
 		backgroundLayer.add(starfield);

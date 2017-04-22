@@ -20,6 +20,6 @@ class Planet extends FlxSprite{
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		angle += _rotationSpeed;
+		angle += _rotationSpeed * elapsed;
 	}
 }
