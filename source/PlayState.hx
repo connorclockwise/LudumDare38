@@ -27,7 +27,7 @@ class PlayState extends FlxState
 
 	public var levelBounds:FlxPoint = new FlxPoint(FlxG.width * 1.1, FlxG.height * 10);
 	
-	public var asteroidBoundarySpacing:Int = 2000;
+	public var asteroidBoundarySpacing:Int = 1000;
 	public var asteroidBounds:FlxPoint;
 	public var asteroidPool:FlxTypedGroup<Asteroid>;
 	public var boundaryAsteroids:FlxGroup;
@@ -115,6 +115,7 @@ class PlayState extends FlxState
 		add(uiLayer);
 		
 		GlobalRegistry.effectLayer = effectLayer;
+		FlxG.watch.add(effectLayer.members, "length", "Explosion Pool Count");
 	}
 
 	public function handleSlingshot(launchVector:FlxPoint):Void{

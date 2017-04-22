@@ -38,7 +38,7 @@ class Asteroid extends FlxSprite
 				triggerExplosion();
 			}
 			if (killTimer < 0) {
-				super.kill();
+				reset(0, 0);
 			}
 		}
 	}
@@ -64,6 +64,7 @@ class Asteroid extends FlxSprite
 	override public function reset(X:Float, Y:Float):Void 
 	{
 		dying = false;
+		visible = true;
 		killTimer = 0.2;
 		explosionTimer = 0.05;
 		super.reset(FlxG.random.float(xBounds.x, xBounds.y), y - (FlxG.height + height + 20));
