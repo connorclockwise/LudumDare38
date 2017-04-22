@@ -34,11 +34,14 @@ class Player extends FlxSprite
 	public function handleInput(){
 
 		var resultantVelocity:FlxVector = new FlxVector(velocity.x, velocity.y);
+		var velocityMag = FlxAngle.getPolarCoords(velocity.x, velocity.y).x; 
+		var amountToTurn:Float = 1.5 * ( Math.min(velocityMag, 10.0) / 10.0);
+
 		if(FlxG.keys.anyPressed([LEFT, A])){
-			resultantVelocity.rotateByDegrees(-1.5);
+			resultantVelocity.rotateByDegrees(-amountToTurn);
 		}
 		if(FlxG.keys.anyPressed([RIGHT, D])){
-			resultantVelocity.rotateByDegrees(1.5);
+			resultantVelocity.rotateByDegrees(amountToTurn);
 		}
 
 		#if FLX_DEBUG

@@ -61,7 +61,7 @@ class PlayState extends FlxState
 			objectLayer.add(planet);
 		}
 
-		var homePlanet:Planet = new Planet(levelBounds.x / 2, - 800, 500, 0, "home");
+		var homePlanet:Planet = new Planet(levelBounds.x / 2, -levelBounds.y - 800, 500, 0, "home");
 		planets.add(homePlanet);
 		objectLayer.add(homePlanet);
 
