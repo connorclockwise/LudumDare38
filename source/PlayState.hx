@@ -53,7 +53,7 @@ class PlayState extends FlxState
 		for(i in 0...numPlanets){
 			position.x = Std.int(FlxG.random.float() * levelBounds.x);
 			position.y = Std.int((FlxG.random.float(-1, 1) * 40) - (i/numPlanets * levelBounds.y));
-			size = Std.int(FlxG.random.float(20, 60));
+			size = Std.int(FlxG.random.float(35, 60));
 			rotationSpeed = FlxG.random.float(1, 4) * 100;
 
 			planet = new Planet(position.x, position.y, size, rotationSpeed, "desert");
@@ -89,10 +89,10 @@ class PlayState extends FlxState
 		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
 		backgroundLayer.add(starfield);
 		
-		 objectLayer.add(new Asteroid(100, 50, new FlxPoint(0, FlxG.width/2)));
-		 objectLayer.add(new Cop(50, 50));
-		 objectLayer.add(new Booster(150, 50));
-		 objectLayer.add(new GasCan(200, 50));
+		objectLayer.add(new Asteroid(100, 50, new FlxPoint(0, FlxG.width/2)));
+		objectLayer.add(new Cop(50, 50));
+		objectLayer.add(new Booster(150, 50));
+		objectLayer.add(new GasCan(200, 50));
 		objectLayer.add(new Planet(250, 50, 0, 0, "life"));
 		objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
 		
@@ -137,13 +137,13 @@ class PlayState extends FlxState
 
 			if(planet._type == "home"){
 				FlxG.camera.flash(FlxColor.WHITE, 1);
-				new FlxTimer().start(0.5, function(_){
+				new FlxTimer().start(0.3, function(_){
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y -3, 3));
 				});
-				new FlxTimer().start(0.55, function(_){
+				new FlxTimer().start(0.4, function(_){
 					effectLayer.add(new ExplosionFX(player.x - 10, player.y + 5, 1));
 				});
-				new FlxTimer().start(0.65, function(_){
+				new FlxTimer().start(0.5, function(_){
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y + 8, 2));
 				});
 				player.kill();
@@ -159,6 +159,13 @@ class PlayState extends FlxState
 			resultantVelocity.rotateByDegrees(angleDiff);
 			p.handleImpulse(resultantVelocity);
 
+			for(i in 0...4){
+				effectLayer.add(new ExplosionFX(
+					planet.x + FlxG.random.float(-planet._size, planet._size),
+					planet.y + FlxG.random.float(-planet._size, planet._size),
+					FlxG.random.int(1,4)
+				));
+			}
 			planet.kill();
 		}
 		
@@ -168,8 +175,14 @@ class PlayState extends FlxState
 	}
 
 	public function updateStarfieldSpeed(){
-		starfield.speed.x = -player.velocity.x;
-		starfield.speed.y = -player.velocity.y;
+		if(player.alive){
+			starfield.speed.x = -player.velocity.x;
+			starfield.speed.y = -player.velocity.y;
+		}
+		else {
+			starfield.speed.x = 0;
+			starfield.speed.y = 0;
+		}
 	}
 
 	override public function update(elapsed:Float):Void

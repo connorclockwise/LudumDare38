@@ -121,6 +121,7 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 			if(dot > 0){
 				arrowSize = Std.int(toSlingShotEnd.x);
 		    	_slingshotPointer.setGraphicSize(20, arrowSize);
+		    	_slingshotPointer.setPosition(_slingshotStart.x, _slingshotStart.y);
 			}
 	    }
 

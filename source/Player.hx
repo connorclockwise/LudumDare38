@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
+import flixel.math.FlxVector;
 
 class Player extends FlxSprite
 {
@@ -30,11 +31,17 @@ class Player extends FlxSprite
 		launchVector.scale(4);
 		handleImpulse(launchVector);
 	}
-	
-	override public function update(elapsed:Float) 
-	{
-		super.update(elapsed);
-		
+
+	public function handleInput(){
+
+		var resultantVelocity:FlxVector = new FlxVector(velocity.x, velocity.y);
+		if(FlxG.keys.anyPressed([LEFT, A])){
+			resultantVelocity.rotateByDegrees(-1.5);
+		}
+		if(FlxG.keys.anyPressed([RIGHT, D])){
+			resultantVelocity.rotateByDegrees(1.5);
+		}
+
 		#if FLX_DEBUG
 		if (FlxG.keys.pressed.LEFT) {
 			this.velocity.x = -400;
@@ -51,5 +58,13 @@ class Player extends FlxSprite
 			this.velocity.y = 0;
 		}
 		#end
+
+		handleImpulse(resultantVelocity);
+	}
+	
+	override public function update(elapsed:Float) 
+	{
+		super.update(elapsed);
+		handleInput();
 	}
 }
