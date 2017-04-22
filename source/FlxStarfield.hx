@@ -2,7 +2,9 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
+import flixel.math.FlxVector;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
@@ -24,9 +26,9 @@ typedef Star = {
 class FlxStarfield extends FlxSprite
 {
 	private var stars:Array<Star>;
-	var starts:Array<FlxPoint> = new Array<FlxPoint>();
-	var ends:Array<FlxPoint> = new Array<FlxPoint>();
-	public var speed = 100;
+	private var starts:Array<FlxPoint> = new Array<FlxPoint>();
+	private var ends:Array<FlxPoint> = new Array<FlxPoint>();
+	public var speed:FlxVector = new FlxVector(0, 100);
 	public function new(X:Float, Y:Float, Width:Float, Height:Float) 
 	{
 		super(X, Y);
@@ -47,13 +49,27 @@ class FlxStarfield extends FlxSprite
 		for (star in stars) {
 			star.prevPos.x = star.pos.x;
 			star.prevPos.y = star.pos.y;
-			star.pos.y += speed * star.vScale * elapsed;
+			star.pos.y += speed.y * star.vScale * elapsed;
+			star.pos.x += speed.x * star.vScale * elapsed;
 			if (star.pos.y > height) {
 				star.pos.y -= height;
 				star.prevPos.y -= height; //Also back up the star
 			}
+			if (star.pos.y < 0) {
+				star.pos.y += height;
+				star.prevPos.y += height; //Also back up the star
+			}
+			if (star.pos.x > width) {
+				star.pos.x -= width;
+				star.prevPos.x -= width; //Also back up the star
+			}
+			if (star.pos.x < 0) {
+				star.pos.x += width;
+				star.prevPos.x += width; //Also back up the star
+			}
 		}
-		speed = FlxG.mouse.x;
+		speed.x = (FlxG.mouse.x - FlxG.width/2) * 2;
+		speed.y = (FlxG.mouse.y - FlxG.height/2) * 2;
 		super.update(elapsed);
 	}
 	
@@ -61,7 +77,7 @@ class FlxStarfield extends FlxSprite
 	{
 		pixels.lock();
 		pixels.fillRect(new Rectangle(0, 0, width, height), 0x0);
-		if (speed < 300) {
+		if (speed.lengthSquared < 10000) {
 			for (star in stars) {
 				pixels.setPixel32(Std.int(star.pos.x), Std.int(star.pos.y), 0xFFFFFFFF);				
 			}
