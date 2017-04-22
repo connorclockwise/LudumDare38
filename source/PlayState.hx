@@ -63,7 +63,11 @@ class PlayState extends FlxState
 		objectLayer.add(new Planet(250, 50, 0, 0, "life"));
 		objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
 		
-		effectLayer.add(new ExplosionFX(50, 150));
+		effectLayer.add(new ExplosionFX(50, 150, 1));
+		effectLayer.add(new ExplosionFX(120, 150, 2));
+		effectLayer.add(new ExplosionFX(180, 150, 3));
+		effectLayer.add(new ExplosionFX(230, 150, 4));
+
 
 		// objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
 		
