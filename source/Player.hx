@@ -56,22 +56,22 @@ class Player extends FlxSprite
 			_helperVector.length = Math.sqrt(_helperVector.lengthSquared + 2500);
 		}
 
-		#if FLX_DEBUG
-		if (FlxG.keys.pressed.LEFT) {
-			this.velocity.x = -400;
-		}else if (FlxG.keys.pressed.RIGHT) {
-			this.velocity.x = 400;
-		}else {
-			this.velocity.x = 0;
-		}
-		if (FlxG.keys.pressed.UP) {
-			this.velocity.y = -400;
-		}else if (FlxG.keys.pressed.DOWN) {
-			this.velocity.y = 400;
-		}else {
-			this.velocity.y = 0;
-		}
-		#end
+		//#if FLX_DEBUG
+		//if (FlxG.keys.pressed.LEFT) {
+			//this.velocity.x = -400;
+		//}else if (FlxG.keys.pressed.RIGHT) {
+			//this.velocity.x = 400;
+		//}else {
+			//this.velocity.x = 0;
+		//}
+		//if (FlxG.keys.pressed.UP) {
+			//this.velocity.y = -400;
+		//}else if (FlxG.keys.pressed.DOWN) {
+			//this.velocity.y = 400;
+		//}else {
+			//this.velocity.y = 0;
+		//}
+		//#end
 
 		if(velocity.x != 0 && velocity.y != 0){
 			handleImpulse(_helperVector);
