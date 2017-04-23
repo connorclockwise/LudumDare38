@@ -2,6 +2,8 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.graphics.FlxGraphic;
+import flixel.group.FlxGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
 /**
@@ -13,6 +15,7 @@ class TestBed extends FlxState
 	public var policeCar:Cop;
 	public var cops:FlxTypedGroup<Cop>;
 	public var player:Player;
+	public var effectLayer:FlxGroup;
 	override public function create():Void 
 	{
 		super.create();
@@ -20,6 +23,9 @@ class TestBed extends FlxState
 		player = new Player(50, 50);
 		player.isGoTime = true;
 		player.fuel = 100000000;
+		
+		effectLayer = new FlxGroup();
+		GlobalRegistry.effectLayer = effectLayer;
 		
 		cops = new FlxTypedGroup<Cop>();
 		
@@ -32,6 +38,7 @@ class TestBed extends FlxState
 		
 		add(player);
 		add(cops);
+		add(effectLayer);
 		
 		FlxG.camera.follow(player);
 		
@@ -42,10 +49,11 @@ class TestBed extends FlxState
 	{
 		super.update(elapsed);
 		FlxG.overlap(player, cops, handleCops);
+		FlxG.worldBounds.set(camera.scroll.x, camera.scroll.y, FlxG.width, FlxG.height);
 	}
 	
 	private function handleCops(player:Player, cop:Cop) {
-		//cop.kill();
+		cop.kill();
 	}
 	
 }

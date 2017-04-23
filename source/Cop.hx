@@ -20,6 +20,10 @@ class Cop extends FlxSprite
 	public var seekTarget:FlxSprite;
 	public var MAX_SPEED:Float = 1000;
 	
+	public var dying:Bool = false;
+	public var deathTimer:Float = 1;
+	public var explosionTimer:Float = 0.05;
+	
 	public var seekPoint:FlxSprite;
 
 	public function new(?X:Float=0, ?Y:Float=0) 
@@ -99,23 +103,66 @@ class Cop extends FlxSprite
 		return finalForce;
 	}
 	
+	private function triggerExplosion() {
+		var explosionPosition:FlxPoint = new FlxPoint(FlxG.random.float(x, x+width), FlxG.random.float(y, y+height));
+		if (GlobalRegistry.effectLayer.getFirstAvailable(ExplosionFX) != null) {
+			cast(GlobalRegistry.effectLayer.getFirstAvailable(ExplosionFX), ExplosionFX).reset(explosionPosition.x, explosionPosition.y);
+		}else {
+			GlobalRegistry.effectLayer.add(new ExplosionFX(explosionPosition.x, explosionPosition.y));
+		}
+	}
+	
+	override public function kill():Void 
+	{
+		if (!dying) {
+			triggerExplosion();
+			acceleration.set(0, 0);
+			velocity.scale(0.6);			
+		}
+		dying = true;
+	}
+	
 	override public function update(elapsed:Float):Void 
 	{
 		super.update(elapsed);
-		forces = [];
-		if (isSeeking) {
-			seek(seekTarget);
-		}
-		if (isPursuing) {
-			pursue(seekTarget);
-		}
-		var newAccel:FlxVector = sumForces();
-		acceleration.copyFrom(newAccel);
-		newAccel.put();
 		
-		angle = FlxVector.get().angleBetween(velocity);
+		if (dying) {
+			visible = !visible;
+			deathTimer -= elapsed;
+			explosionTimer -= elapsed;
+			if (explosionTimer < 0) {
+				triggerExplosion();
+				explosionTimer += 0.05;
+			}
+			if (deathTimer < 0) {
+				super.kill();
+			}
+		}else {
+			forces = [];
+			if (isSeeking) {
+				seek(seekTarget);
+			}
+			if (isPursuing) {
+				pursue(seekTarget);
+			}
+			var newAccel:FlxVector = sumForces();
+			acceleration.copyFrom(newAccel);
+			newAccel.put();
+			
+			angle = FlxVector.get().angleBetween(velocity);
+			
+			seekPoint.update(elapsed);			
+		}
 		
-		seekPoint.update(elapsed);
+	}
+	
+	override public function revive():Void 
+	{
+		super.revive();
+		dying = false;
+		visible = true;
+		explosionTimer = 0.05;
+		deathTimer = 1;
 	}
 	
 	override public function draw():Void 

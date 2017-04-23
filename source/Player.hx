@@ -31,8 +31,12 @@ class Player extends FlxSprite
 		fuel = 5000;
 		isGoTime = false;
 		swayCounter = 0;
-
-		_boosterLoop = FlxG.sound.load(AssetPaths.booster_loop__ogg, 1.5, true);
+		
+		#if flash
+		_boosterLoop = FlxG.sound.load(AssetPaths.booster_loop__mp3, 1, true);
+		#else
+		_boosterLoop = FlxG.sound.load(AssetPaths.booster_loop__ogg, 1, true);
+		#end
 	}
 
 	public function handleImpulse(newVelocity:FlxPoint) {
@@ -96,7 +100,7 @@ class Player extends FlxSprite
 				}
 
 				if(!_boosterLoop.playing){
-					_boosterLoop.play(0.3);
+					_boosterLoop.play(false, 0.3);
 				}
 			}
 			else{
