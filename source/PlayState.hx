@@ -3,15 +3,12 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.graphics.frames.FlxBitmapFont;
 import flixel.group.FlxGroup;
 import flixel.group.FlxGroup;
 import flixel.math.FlxAngle;
-import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
-import flixel.text.FlxBitmapText;
-import flixel.text.FlxText;
+import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 
@@ -41,6 +38,8 @@ class PlayState extends FlxState
 	public var boundaryAsteroids:FlxGroup;
 	public var boundaryPosition:Int = 0; //0 is on the left, 1 is on the right.
 	public var asteroidBeltWidth:Float;
+
+	public var loopMusic:FlxSound;
 	
 	override public function create():Void
 	{
@@ -156,7 +155,6 @@ class PlayState extends FlxState
 		GlobalRegistry.effectLayer = effectLayer;
 		FlxG.watch.add(effectLayer.members, "length", "Explosion Pool Count");
 		
-
 		uiLayer.add(new SpeedGague());
 		uiLayer.add(new FuelGague());
 		
@@ -169,6 +167,8 @@ class PlayState extends FlxState
 		slingShotHud.kill();
 		uiLayer.add(collisionIndicatorHud);
 		player.isGoTime = true;
+		
+		loopMusic = FlxG.sound.play(AssetPaths.loop__ogg, 0.2);
 	}
 
 	public function handleCollision(p:Player, _):Void{
@@ -190,6 +190,7 @@ class PlayState extends FlxState
 				FlxG.camera.flash(FlxColor.WHITE, 1);
 				collisionIndicatorHud.kill();
 				player.kill();
+				loopMusic.pause();
 				new FlxTimer().start(0.3, function(_){
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y -3, 3));
 				});
