@@ -19,7 +19,7 @@ class Cop extends FlxSprite
 	public var isSeeking:Bool = false;
 	public var isPursuing:Bool = false;
 	public var seekTarget:FlxSprite;
-	public var MAX_SPEED:Float = 1400;
+	public var MAX_SPEED:Float = 1000;
 	
 	public var dying:Bool = false;
 	public var deathTimer:Float = 1;

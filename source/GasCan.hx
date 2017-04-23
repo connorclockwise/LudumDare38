@@ -22,7 +22,7 @@ class GasCan extends FlxSprite
 	}
 	
 	public function onCollect(player:Player) {
-		player.fuel += 3000;
+		player.fuel += 1500;
 		FlxG.sound.play("assets/sounds/Gascan-Pickup.wav", 0.6, false);
 	}
 }

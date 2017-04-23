@@ -28,7 +28,7 @@ class Player extends FlxSprite
 		animation.add("off", [5]);
 		animation.play("off");
 		_helperVector = new FlxVector();
-		fuel = 5000;
+		fuel = 3000;
 		isGoTime = false;
 		swayCounter = 0;
 		
@@ -89,11 +89,11 @@ class Player extends FlxSprite
 					_helperVector.set(1, 0);
 					_helperVector.rotateByDegrees(angle - 90);
 				}
-				_helperVector.length = Math.sqrt(_helperVector.lengthSquared + 2500);
+				_helperVector.length = Math.sqrt(_helperVector.lengthSquared + 1800);
 				//Using fuel doesn't do nearly as much as hitting something for stabilizing speed loss. But only if it would help.
-				if (lastSpeedChangeCountdown < 0.4) {
-					lastSpeedChangeCountdown = 0.4; 				
-				}
+				//if (lastSpeedChangeCountdown < 0.2) {
+					//lastSpeedChangeCountdown = 0.2; 				
+				//}
 
 				if(!_boosterLoop.playing){
 					_boosterLoop.play(false, 0.3);
