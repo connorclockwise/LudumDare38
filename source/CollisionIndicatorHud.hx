@@ -51,6 +51,7 @@ class CollisionIndicatorHud extends FlxTypedGroup<FlxSprite>
 		_alivePlanets.sort(sortByPlayerProximity);
 
 		var playerMidpoint:FlxPoint = _player.getMidpoint();
+		var planet:Planet;
 		var planetMidPoint:FlxPoint;
 		var playerToPlanet:FlxPoint;
 		var size:Float;
@@ -58,7 +59,8 @@ class CollisionIndicatorHud extends FlxTypedGroup<FlxSprite>
 		var count = Std.int(Math.min(_alivePlanets.length, _numArrows));
 
 		for(i in 0...count){
-			planetMidPoint = _alivePlanets[i].getMidpoint();
+			planet = cast(_alivePlanets[i], Planet);
+			planetMidPoint = planet.getMidpoint();
 			playerToPlanet = planetMidPoint.subtractPoint(playerMidpoint);
 			playerToPlanet = FlxAngle.getPolarCoords(playerToPlanet.x, playerToPlanet.y);
 
@@ -67,6 +69,18 @@ class CollisionIndicatorHud extends FlxTypedGroup<FlxSprite>
 			_arrows.members[i].x = playerToPlanet.x + playerMidpoint.x;
 			_arrows.members[i].y = playerToPlanet.y + playerMidpoint.y;
 			_arrows.members[i].scale.set(size, size);
+
+			if(planet._type == "home")
+			{
+				_arrows.members[i].color = FlxColor.YELLOW;
+			}
+			else
+			{
+				_arrows.members[i].color = FlxColor.WHITE;
+			}
+		}
+		for(i in count..._numArrows){
+			_arrows.members[i].color = FlxColor.TRANSPARENT;
 		}
 	}
 

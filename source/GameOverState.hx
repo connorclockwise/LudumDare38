@@ -28,15 +28,15 @@ class GameOverState extends FlxState
 		super.create();
 		_splashScreen = new FlxSprite(0,0);
 		if(_isWin){
-			_splashScreen.loadGraphic(AssetPaths.winScreen__png, false, 450, 200);
+			_splashScreen.loadGraphic(AssetPaths.winScreen__png, false, 640, 480);
 		}
 		else{
-			_splashScreen.loadGraphic(AssetPaths.loseScreen__png, false, 450, 200);
+			_splashScreen.loadGraphic(AssetPaths.loseScreen__png, false, 640, 480);
 		}
 		_splashScreen.screenCenter();
-		_splashScreen.y -= 100;
 		_playButton = new FlxButton(0, 0, "Try Again Comrade", gotoMenuState);
 		_playButton.screenCenter();
+		_playButton.width = 150;
 		_playButton.y += 50;
 		add(_splashScreen);
 		add(_playButton);

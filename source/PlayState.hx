@@ -30,7 +30,7 @@ class PlayState extends FlxState
 
 	public var player:Player;
 
-	public var levelBounds:FlxPoint = new FlxPoint(FlxG.width * 1.1, FlxG.height * 10);
+	public var levelBounds:FlxPoint = new FlxPoint(FlxG.width * 1.1, FlxG.height * 20);
 	
 	public var asteroidBoundarySpacing:Int = 1000;
 	public var asteroidBounds:FlxPoint;
@@ -53,6 +53,7 @@ class PlayState extends FlxState
 		var size:Int;
 		var rotationSpeed:Float;
 		var planet:Planet;
+		var planetType:String;
 		var numPlanets:Int = 15;
 		
 		for(i in 0...numPlanets){
@@ -61,7 +62,14 @@ class PlayState extends FlxState
 			size = Std.int(FlxG.random.float(90, 118));
 			rotationSpeed = FlxG.random.float(1, 4) * 100;
 
-			planet = new Planet(position.x, position.y, size, rotationSpeed, "desert");
+			if(FlxG.random.int(0,1) == 0){
+				planetType = "desert";
+			}
+			else {
+				planetType = "life";
+			}
+
+			planet = new Planet(position.x, position.y, size, rotationSpeed, planetType);
 			planets.add(planet);
 			objectLayer.add(planet);
 		}
@@ -113,7 +121,6 @@ class PlayState extends FlxState
 		uiLayer.add(slingShotHud);
 
 		collisionIndicatorHud = new CollisionIndicatorHud(player, planets);
-		uiLayer.add(collisionIndicatorHud);
 		
 		add(backgroundLayer);
 		add(objectLayer);
@@ -132,6 +139,7 @@ class PlayState extends FlxState
 		FlxG.camera.follow(player);
 		player.handleSlingshot(launchVector);
 		slingShotHud.kill();
+		uiLayer.add(collisionIndicatorHud);
 	}
 
 	public function handleCollision(p:Player, _):Void{

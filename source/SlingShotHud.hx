@@ -46,7 +46,7 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 		_player = player;
 
 		_slingshotPointer = new FlxSprite(0,0);
-		_slingshotPointer.makeGraphic(20, 1, FlxColor.WHITE);
+		_slingshotPointer.loadGraphic(AssetPaths.slingshotArrow__png, true, 20, 80);
 		_slingshotPointer.origin.set(10, 0);
 		_slingshotPointer.kill();
 
