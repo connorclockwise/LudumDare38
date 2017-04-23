@@ -19,6 +19,12 @@ class Planet extends FlxSprite{
 				loadGraphic(AssetPaths.Planet_Life__png);
 			case "desert":
 				loadGraphic(AssetPaths.Planet_Desert__png);
+			case "lava":
+				loadGraphic(AssetPaths.Planet_Lava__png);
+			case "gas1":
+				loadGraphic(AssetPaths.Planet_Light_Gas__png);
+			case "gas2":
+				loadGraphic(AssetPaths.Planet_Dark_Gas__png);
 			case "home":
 				loadGraphic(AssetPaths.Planet_Life__png);
 			default:

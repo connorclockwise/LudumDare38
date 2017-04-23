@@ -24,7 +24,6 @@ class Player extends FlxSprite
 		_helperVector = new FlxVector();
 		fuel = 5000;
 		isGoTime = false;
-		//makeGraphic(20, 50, FlxColor.WHITE);
 	}
 
 	public function handleImpulse(newVelocity:FlxPoint) {

@@ -65,12 +65,7 @@ class PlayState extends FlxState
 			size = Std.int(FlxG.random.float(90, 118));
 			rotationSpeed = FlxG.random.float(1, 4) * 100;
 
-			if(FlxG.random.int(0,1) == 0){
-				planetType = "desert";
-			}
-			else {
-				planetType = "life";
-			}
+			planetType = FlxG.random.getObject(["desert", "lava", "life", "gas1", "gas2"]);
 
 			planet = new Planet(position.x, position.y, size, rotationSpeed, planetType);
 			planets.add(planet);
@@ -143,6 +138,8 @@ class PlayState extends FlxState
 		fuelText = new FlxText(0, 10, 100, "FUEL: ");
 		fuelText.scrollFactor.set(0, 0);
 		uiLayer.add(fuelText);
+		
+		FlxG.camera.setScrollBounds(asteroidBounds.x - asteroidBeltWidth, asteroidBounds.y + asteroidBeltWidth, null, null);
 	}
 
 	public function handleSlingshot(launchVector:FlxPoint):Void{
@@ -221,7 +218,7 @@ class PlayState extends FlxState
 		
 		if (Std.is(_, Asteroid)) {
 			if (!cast(_, Asteroid).dying) {
-				player.changeSpeed(-35);				
+				player.changeSpeed(-15);				
 			}
 			cast(_, Asteroid).kill();
 		}
@@ -276,6 +273,14 @@ class PlayState extends FlxState
 					asteroid.fullReset();
 				});
 			}
+		}
+		
+		//Keep the player in-bounds
+		if (player.x < asteroidBounds.x - asteroidBeltWidth && player.velocity.x < 0) {
+			player.velocity.x = -player.velocity.x;
+		}
+		if (player.x + player.width > asteroidBounds.y + asteroidBeltWidth && player.velocity.x > 0) {
+			player.velocity.x = -player.velocity.x;
 		}
 		
 		speedText.text = "SPEED: " + Math.floor(new FlxVector(player.velocity.x, player.velocity.y).length);
