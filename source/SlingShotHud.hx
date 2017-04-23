@@ -48,10 +48,10 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 		_reticuleTrail2.makeGraphic(4, 4, FlxColor.fromHSL(1, 0.0, 0.25, 1));
 		_player = player;
 
-		_slingshotHelp1 = new FlxText(0, 0, "Drag and release your mouse", 16);
+		_slingshotHelp1 = new FlxText(0, 0, 300, "Drag and release your mouse", 16);
 		_slingshotHelp1.screenCenter();
 		_slingshotHelp1.y = FlxG.height - 24 - 40;
-		_slingshotHelp2 = new FlxText(0, 0, "to slingshot home", 16);
+		_slingshotHelp2 = new FlxText(0, 0, 300, "to slingshot home", 16);
 		_slingshotHelp2.screenCenter();
 		_slingshotHelp2.y = FlxG.height - 24 - 20;
 		_slingshotPointer = new FlxSprite(0,0);

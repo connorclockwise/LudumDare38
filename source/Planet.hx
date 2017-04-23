@@ -51,6 +51,7 @@ class Planet extends FlxSprite{
 			deathTimer = 1.5;
 			explosionTimer = 0.03;
 			triggerExplosion();
+			FlxG.sound.play("assets/sounds/Multi-Explosion-Long.wav", 0.3, false);
 		}
 	}
 	

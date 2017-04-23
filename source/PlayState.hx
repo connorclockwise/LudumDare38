@@ -50,6 +50,7 @@ class PlayState extends FlxState
 		objectLayer = new FlxGroup();
 		effectLayer = new FlxGroup();
 		backgroundLayer = new FlxGroup();
+		GlobalRegistry.asteroidExplosionSounds = new FlxTypedGroup<FlxSound>();
 
 		planets = new FlxTypedGroup<FlxSprite>();
 		collectibles = new FlxTypedGroup<FlxSprite>();
@@ -123,6 +124,9 @@ class PlayState extends FlxState
 			asteroid.xBounds.set(asteroidBounds.x-asteroidBeltWidth, asteroidBounds.x);
 			asteroid.fullReset();
 		});
+		for (i in 0...3) {
+			GlobalRegistry.asteroidExplosionSounds.add(FlxG.sound.load(AssetPaths.Multi_Explosion_Short__wav, 0.3, false));
+		}
 		
 		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
 		backgroundLayer.add(starfield);

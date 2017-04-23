@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.system.FlxSound;
 
 /**
  * ...
@@ -59,6 +60,7 @@ class Asteroid extends FlxSprite
 		//Do no super.kill
 		if (dying == false) {
 			triggerExplosion();
+			GlobalRegistry.getOldestExplosionSound().play(true);
 		}
 		dying = true;
 	}

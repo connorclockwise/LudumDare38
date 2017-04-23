@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxSprite;
+import flixel.FlxG;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 
 /**
@@ -20,5 +21,6 @@ class GasCan extends FlxSprite
 	
 	public function onCollect(player:Player) {
 		player.fuel += 3000;
+		FlxG.sound.play("assets/sounds/Gascan-Pickup.wav", 0.3, false);
 	}
 }

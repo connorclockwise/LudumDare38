@@ -6,6 +6,7 @@ import flixel.animation.FlxPrerotatedAnimation;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.system.FlxSound;
 
 /**
  * ...
@@ -23,6 +24,8 @@ class Cop extends FlxSprite
 	public var dying:Bool = false;
 	public var deathTimer:Float = 1;
 	public var explosionTimer:Float = 0.05;
+	
+	public var siren:FlxSound;
 
 	public function new(?X:Float=0, ?Y:Float=0) 
 	{
@@ -30,6 +33,8 @@ class Cop extends FlxSprite
 		loadGraphic(AssetPaths.Copper__png, true, 32, 64);
 		animation.add("pulse", [0, 1, 2, 3, 4], 16);
 		animation.play("pulse");
+		
+		siren = FlxG.sound.load(AssetPaths.Polis_Loop__wav, 0.2, true);
 	}
 	
 	public function seek(target:FlxSprite):FlxVector {
@@ -110,7 +115,10 @@ class Cop extends FlxSprite
 		if (!dying) {
 			triggerExplosion();
 			acceleration.set(0, 0);
-			velocity.scale(0.6);			
+			velocity.scale(0.6);
+			siren.stop();
+			FlxG.sound.play("assets/sounds/Multi-Explosion-Short.wav", 0.2, false);
+			FlxG.sound.play("assets/sounds/Polis-Die.wav", 0.3, false);
 		}
 		dying = true;
 	}
@@ -154,5 +162,6 @@ class Cop extends FlxSprite
 		visible = true;
 		explosionTimer = 0.05;
 		deathTimer = 1;
+		siren.play(false, 0.0);
 	}
 }

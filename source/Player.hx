@@ -32,11 +32,7 @@ class Player extends FlxSprite
 		isGoTime = false;
 		swayCounter = 0;
 		
-		#if flash
-		_boosterLoop = FlxG.sound.load(AssetPaths.booster_loop__mp3, 1, true);
-		#else
-		_boosterLoop = FlxG.sound.load(AssetPaths.booster_loop__ogg, 1, true);
-		#end
+		_boosterLoop = FlxG.sound.load(AssetPaths.Thrust__wav, 1, true);
 	}
 
 	public function handleImpulse(newVelocity:FlxPoint) {

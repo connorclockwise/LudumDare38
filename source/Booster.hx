@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxSprite;
+import flixel.FlxG;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 
 /**
@@ -20,5 +21,6 @@ class Booster extends FlxSprite
 	
 	public function onCollect(player:Player) {
 		player.changeSpeed(300);
+		FlxG.sound.play("assets/sounds/Booster-Pickup.wav", 0.3, false);
 	}
 }
