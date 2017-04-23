@@ -22,7 +22,7 @@ class CollisionIndicatorHud extends FlxTypedGroup<FlxSprite>
 	public var _tempDistance2:Float;
 
 	public var _numPlanetArrows = 3;
-	public var _numCollectibleArrows = 3;
+	public var _numCollectibleArrows = 1;
 
 	public function new (player:Player, 
 						 planets:FlxTypedGroup<FlxSprite>,

@@ -41,6 +41,18 @@ class PlayState extends FlxState
 	
 	public var cop:Cop;
 	public var copSpawnTimer:Float = 3;
+
+	public function isNearAnyObjects(a:FlxPoint, b:FlxGroup):Bool{
+		var distance:FlxPoint;
+		var sprite:FlxSprite;
+		for(member in b.members){
+			sprite = cast(member, FlxSprite);
+			if(a.distanceTo(sprite.getMidpoint()) < 150){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	override public function create():Void
 	{
@@ -74,30 +86,27 @@ class PlayState extends FlxState
 			objectLayer.add(planet);
 		}
 
-		var numGasCans:Int = 11;
-		var gasCan:GasCan;
+		var powerups:Int = 20;
+		var powerUp:FlxSprite;
 
-		for(i in 0...numGasCans){
+		for(i in 0...powerups){
 			position.x = Std.int(FlxG.random.float() * levelBounds.x);
-			position.y = Std.int((FlxG.random.float(-1, 1) * 40) - (i/numGasCans * levelBounds.y));
+			position.y = Std.int((FlxG.random.float(-1, 1) * 40) - (i/powerups * levelBounds.y));
 
-			
+			while(isNearAnyObjects(position, objectLayer)){
+				position.x = Std.int(FlxG.random.float() * levelBounds.x);
+				position.y = Std.int((FlxG.random.float(-1, 1) * 40) - (i/powerups * levelBounds.y));
+			}
 
-			gasCan = new GasCan(position.x, position.y);
-			objectLayer.add(gasCan);
-			collectibles.add(gasCan);
-		}
+			if(FlxG.random.int(0,1) == 0){
+				powerUp = new GasCan(position.x, position.y);
+			}
+			else{
+				powerUp = new Booster(position.x, position.y);
+			}
 
-		var numBoosters:Int = 12;
-		var booster:Booster;
-
-		for(i in 0...numBoosters){
-			position.x = Std.int(FlxG.random.float() * levelBounds.x);
-			position.y = Std.int((FlxG.random.float(-1, 1) * 40) - (i/numBoosters * levelBounds.y));
-
-			booster = new Booster(position.x, position.y);
-			objectLayer.add(booster);
-			collectibles.add(booster);
+			objectLayer.add(powerUp);
+			collectibles.add(powerUp);
 		}
 
 		var homePlanet:Planet = new Planet(levelBounds.x / 2, -levelBounds.y - 800, 500, 0, "home");
