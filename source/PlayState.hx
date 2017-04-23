@@ -74,7 +74,7 @@ class PlayState extends FlxState
 			objectLayer.add(planet);
 		}
 
-		var numGasCans:Int = 6;
+		var numGasCans:Int = 12;
 		var gasCan:GasCan;
 
 		for(i in 0...numGasCans){
