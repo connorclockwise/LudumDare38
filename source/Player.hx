@@ -6,6 +6,7 @@ import flixel.math.FlxAngle;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVector;
+import flixel.system.FlxSound;
 
 class Player extends FlxSprite
 {
@@ -16,6 +17,8 @@ class Player extends FlxSprite
 	public var isGoTime:Bool;
 	public var swayCounter:Float;
 	public var lastSpeedChangeCountdown:Float = 2; //2 second countdown from last speed change
+
+	public var _boosterLoop:FlxSound;
 
 	public function new(X:Float, Y:Float) 
 	{
@@ -28,6 +31,8 @@ class Player extends FlxSprite
 		fuel = 5000;
 		isGoTime = false;
 		swayCounter = 0;
+
+		_boosterLoop = FlxG.sound.load(AssetPaths.booster_loop__ogg, 1.5, true);
 	}
 
 	public function handleImpulse(newVelocity:FlxPoint) {
@@ -89,9 +94,21 @@ class Player extends FlxSprite
 				if (lastSpeedChangeCountdown < 0.4) {
 					lastSpeedChangeCountdown = 0.4; 				
 				}
+
+				if(!_boosterLoop.playing){
+					_boosterLoop.play(0.3);
+				}
+			}
+			else{
+				_boosterLoop.pause();
 			}
 			handleImpulse(_helperVector);			
 		}
+	}
+
+	override public function kill(){
+		super.kill();
+		_boosterLoop.pause();
 	}
 	
 	override public function update(elapsed:Float) 

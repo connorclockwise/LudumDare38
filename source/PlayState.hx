@@ -167,7 +167,7 @@ class PlayState extends FlxState
 		slingShotHud.kill();
 		uiLayer.add(collisionIndicatorHud);
 		player.isGoTime = true;
-		
+
 		loopMusic = FlxG.sound.play(AssetPaths.loop__ogg, 0.2);
 	}
 
@@ -191,6 +191,7 @@ class PlayState extends FlxState
 				collisionIndicatorHud.kill();
 				player.kill();
 				loopMusic.pause();
+				FlxG.sound.play(AssetPaths.explosion__ogg, 1.6);
 				new FlxTimer().start(0.3, function(_){
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y -3, 3));
 				});
@@ -229,6 +230,7 @@ class PlayState extends FlxState
 				"Somebody get that guy's plate."
 			]);
 			scoreHud.updateScore(score, excuseString);
+			FlxG.sound.play(AssetPaths.explosion__ogg, 0.8);
 			planet.kill();
 			player.changeSpeed(-75);
 		}
