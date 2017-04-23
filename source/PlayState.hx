@@ -41,6 +41,9 @@ class PlayState extends FlxState
 
 	public var loopMusic:FlxSound;
 	
+	public var cop:Cop;
+	public var copSpawnTimer:Float = 3;
+	
 	override public function create():Void
 	{
 		super.create();
@@ -127,7 +130,9 @@ class PlayState extends FlxState
 		backgroundLayer.add(starfield);
 		
 		// objectLayer.add(new Asteroid(100, 50, new FlxPoint(0, FlxG.width/2)));
-		// objectLayer.add(new Cop(50, 50));
+		cop = new Cop(50, 50);
+		cop.pursueOn(player);
+		objectLayer.add(cop);
 		// objectLayer.add(new Booster(150, 50));
 		// objectLayer.add(new GasCan(200, 50));
 		// objectLayer.add(new Planet(250, 50, 0, 0, "life"));
@@ -167,8 +172,46 @@ class PlayState extends FlxState
 		slingShotHud.kill();
 		uiLayer.add(collisionIndicatorHud);
 		player.isGoTime = true;
-
+		
+		#if flash
+		loopMusic = FlxG.sound.play(AssetPaths.loop__mp3, 0.2);
+		#else
 		loopMusic = FlxG.sound.play(AssetPaths.loop__ogg, 0.2);
+		#end
+	}
+	
+	function punchPlayer(player:Player, vectorToPlayer:FlxPoint) {
+		var velocityNorm:FlxPoint = new FlxPoint().copyFrom(player.velocity);
+		velocityNorm.x = -velocityNorm.x;
+		velocityNorm.y = -velocityNorm.y;
+		velocityNorm = FlxAngle.getPolarCoords(velocityNorm.x, velocityNorm.y);
+		var angleDiff:Float = FlxAngle.wrapAngle(velocityNorm.y - vectorToPlayer.y);
+		angleDiff = Math.min(Math.max(angleDiff, -30), 30);
+
+		var resultantVelocity:FlxVector = new FlxVector(player.velocity.x, player.velocity.y);
+		resultantVelocity.rotateByDegrees(angleDiff);
+		player.handleImpulse(resultantVelocity);
+	}
+	
+	public function handleCopFakeouts(cop:Cop, object:FlxSprite) {
+		if (Std.is(object, Asteroid)) {
+			if (!cop.dying) {
+				cast(object, Asteroid).kill();
+				cop.kill();
+				
+				score += 50;
+				scoreHud.updateScore(score, "HA! CYKA POLIS");
+			}
+		}
+		if (Std.is(object, Planet)) {
+			if (!cop.dying) {
+				cast(object, Planet).kill();
+				cop.kill();
+				
+				score += 200;
+				scoreHud.updateScore(score, "Some protector");
+			}
+		}
 	}
 
 	public function handleCollision(p:Player, _):Void{
@@ -191,7 +234,12 @@ class PlayState extends FlxState
 				collisionIndicatorHud.kill();
 				player.kill();
 				loopMusic.pause();
+				
+				#if flash
+				FlxG.sound.play(AssetPaths.explosion__mp3, 1.6);
+				#else
 				FlxG.sound.play(AssetPaths.explosion__ogg, 1.6);
+				#end
 				new FlxTimer().start(0.3, function(_){
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y -3, 3));
 				});
@@ -206,18 +254,11 @@ class PlayState extends FlxState
 				});
 				return;
 			}
-			var velocityNorm:FlxPoint = new FlxPoint().copyFrom(p.velocity);
-			velocityNorm.x = -velocityNorm.x;
-			velocityNorm.y = -velocityNorm.y;
-			velocityNorm = FlxAngle.getPolarCoords(velocityNorm.x, velocityNorm.y);
-			var angleDiff:Float = FlxAngle.wrapAngle(velocityNorm.y - planetToPlayer.y);
-			angleDiff = Math.min(Math.max(angleDiff, -30), 30);
+			
+			punchPlayer(p, planetToPlayer);
+			
 
-			var resultantVelocity:FlxVector = new FlxVector(p.velocity.x, p.velocity.y);
-			resultantVelocity.rotateByDegrees(angleDiff);
-			p.handleImpulse(resultantVelocity);
-
-			score += 100;
+			score += 1000;
 			var excuseString:String = FlxG.random.getObject([
 				"Accidental Collision",
 				"I didn't see it.",
@@ -230,14 +271,20 @@ class PlayState extends FlxState
 				"Somebody get that guy's plate."
 			]);
 			scoreHud.updateScore(score, excuseString);
+			#if flash
+			FlxG.sound.play(AssetPaths.explosion__mp3, 0.8);
+			#else
 			FlxG.sound.play(AssetPaths.explosion__ogg, 0.8);
+			#end
 			planet.kill();
 			player.changeSpeed(-75);
 		}
 		
 		if (Std.is(_, Asteroid)) {
 			if (!cast(_, Asteroid).dying) {
-				player.changeSpeed(-15);				
+				player.changeSpeed( -15);	
+				score += 75;
+				scoreHud.updateScore(score, "");
 			}
 			cast(_, Asteroid).kill();
 		}
@@ -250,6 +297,19 @@ class PlayState extends FlxState
 		if (Std.is(_, Booster)) {
 			cast(_, Booster).kill();
 			cast(_, Booster).onCollect(player);
+		}
+		
+		if (Std.is(_, Cop)) {
+			if (!cast(_, Cop).dying) {
+				cast(_, Cop).kill();
+				score += 120;
+				scoreHud.updateScore(score, "Remove Kebab");
+				
+				var copToPlayer:FlxPoint = new FlxPoint().copyFrom(p.getMidpoint());
+				copToPlayer.subtractPoint(cast(_, Cop).getMidpoint());
+				copToPlayer = FlxAngle.getPolarCoords(copToPlayer.x, copToPlayer.y);
+				punchPlayer(p, copToPlayer);
+			}
 		}
 	}
 
@@ -268,6 +328,7 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 		FlxG.overlap(player, objectLayer, handleCollision);
+		FlxG.overlap(cop, objectLayer, handleCopFakeouts);
 		FlxG.worldBounds.set(
 			player.x - FlxG.worldBounds.width / 2,
 			player.y - FlxG.worldBounds.height / 2,
@@ -307,6 +368,15 @@ class PlayState extends FlxState
 			new FlxTimer().start(3.0, function(_){
 				FlxG.switchState(new GameOverState(false, score));
 			});				
+		}
+		
+		//Respawn the cop
+		if (cop.alive == false) {
+			copSpawnTimer -= elapsed;
+			if (copSpawnTimer <= 0) {
+				copSpawnTimer = FlxG.random.float(0.3, 1.5);
+				cop.reset(FlxG.random.float(player.x - 300, player.x + 300), FlxG.random.float(player.y + 400, player.y + 600));
+			}
 		}
 		
 	}

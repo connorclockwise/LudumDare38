@@ -43,8 +43,12 @@ class MenuState extends FlxState
 		add(_splashScreen);
 		add(_playButton);
 		add(_helpButton);
-
+		
+		#if flash
+		introMusic = FlxG.sound.play(AssetPaths.intro__mp3, 0.2);
+		#else
 		introMusic = FlxG.sound.play(AssetPaths.intro__ogg, 0.2);
+		#end
 	}
 
 	override public function update(elapsed:Float):Void

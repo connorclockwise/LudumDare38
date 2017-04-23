@@ -18,13 +18,11 @@ class Cop extends FlxSprite
 	public var isSeeking:Bool = false;
 	public var isPursuing:Bool = false;
 	public var seekTarget:FlxSprite;
-	public var MAX_SPEED:Float = 1000;
+	public var MAX_SPEED:Float = 1400;
 	
 	public var dying:Bool = false;
 	public var deathTimer:Float = 1;
 	public var explosionTimer:Float = 0.05;
-	
-	public var seekPoint:FlxSprite;
 
 	public function new(?X:Float=0, ?Y:Float=0) 
 	{
@@ -32,9 +30,6 @@ class Cop extends FlxSprite
 		loadGraphic(AssetPaths.Copper__png, true, 32, 64);
 		animation.add("pulse", [0, 1, 2, 3, 4], 16);
 		animation.play("pulse");
-		
-		seekPoint = new FlxSprite(0, 0);
-		seekPoint.makeGraphic(3, 3);
 	}
 	
 	public function seek(target:FlxSprite):FlxVector {
@@ -42,8 +37,6 @@ class Cop extends FlxSprite
 	}
 	
 	public function seekToAtSpeed(targetPoint:FlxVector, speed:Float):FlxVector {
-		seekPoint.x = targetPoint.x;
-		seekPoint.y = targetPoint.y;
 		var myPos:FlxPoint = getPosition(null);
 		var targetVec:FlxVector = cast(FlxVector.get().copyFrom(targetPoint), FlxVector);
 		var myVec:FlxVector = cast(FlxVector.get().copyFrom(myPos), FlxVector);
@@ -150,8 +143,6 @@ class Cop extends FlxSprite
 			newAccel.put();
 			
 			angle = FlxVector.get().angleBetween(velocity);
-			
-			seekPoint.update(elapsed);			
 		}
 		
 	}
@@ -164,11 +155,4 @@ class Cop extends FlxSprite
 		explosionTimer = 0.05;
 		deathTimer = 1;
 	}
-	
-	override public function draw():Void 
-	{
-		super.draw();
-		seekPoint.draw();
-	}
-	
 }
