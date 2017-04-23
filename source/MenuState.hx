@@ -23,7 +23,6 @@ class MenuState extends FlxState
 		_splashScreen = new FlxSprite(0,0);
 		_splashScreen.loadGraphic(AssetPaths.splashScreen__png, false, 450, 200);
 		_splashScreen.screenCenter();
-		_splashScreen.y -= 100;
 		_playButton = new FlxButton(0, 0, "Drive Safetly", gotoPlayState);
 		_playButton.screenCenter();
 		_playButton.y += 50;

@@ -72,7 +72,7 @@ class CollisionIndicatorHud extends FlxTypedGroup<FlxSprite>
 
 			if(planet._type == "home")
 			{
-				_arrows.members[i].color = FlxColor.YELLOW;
+				_arrows.members[i].color = FlxColor.GREEN;
 			}
 			else
 			{

@@ -17,6 +17,7 @@ class PlayState extends FlxState
 {
 	public var starfield:FlxStarfield;
 
+	public var scoreHud:SlingShotHud;
 	public var slingShotHud:SlingShotHud;
 	public var collisionIndicatorHud:CollisionIndicatorHud;
 	
