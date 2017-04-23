@@ -131,11 +131,11 @@ class PlayState extends FlxState
 		GlobalRegistry.effectLayer = effectLayer;
 		FlxG.watch.add(effectLayer.members, "length", "Explosion Pool Count");
 		
-		speedText = new FlxText(0, FlxG.height - 20, 100, "SPEED: ", 16);
+		speedText = new FlxText(0, FlxG.height - 20, 200, "SPEED: ", 16);
 		speedText.scrollFactor.set(0, 0);
 		uiLayer.add(speedText);
 		
-		fuelText = new FlxText(0, 10, 100, "FUEL: ");
+		fuelText = new FlxText(0, FlxG.height - 30, 200, "FUEL: ");
 		fuelText.scrollFactor.set(0, 0);
 		uiLayer.add(fuelText);
 		

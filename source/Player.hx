@@ -14,6 +14,8 @@ class Player extends FlxSprite
 	public var _helperVector:FlxVector;
 	public var fuel:Float;
 	public var isGoTime:Bool;
+	
+	public var lastSpeedChangeCountdown:Float = 2; //2 second countdown from last speed change
 
 	public function new(X:Float, Y:Float) 
 	{
@@ -43,7 +45,7 @@ class Player extends FlxSprite
 		handleImpulse(launchVector);
 	}
 	
-	public function changeSpeed(amount:Float) {
+	public function changeSpeed(amount:Float, ?ignoreDecay:Bool=false) {
 		_helperVector.copyFrom(velocity);
 		if (_helperVector.length < Math.abs(amount) && amount< 0) {
 			_helperVector.length = 0;
@@ -51,6 +53,9 @@ class Player extends FlxSprite
 			_helperVector.length += amount;
 		}
 		velocity.copyFrom(_helperVector);
+		if (!ignoreDecay) {
+			lastSpeedChangeCountdown = 2;
+		}
 	}
 
 	public function handleInput(){
@@ -77,6 +82,10 @@ class Player extends FlxSprite
 					_helperVector.rotateByDegrees(angle - 90);
 				}
 				_helperVector.length = Math.sqrt(_helperVector.lengthSquared + 2500);
+				//Using fuel doesn't do nearly as much as hitting something for stabilizing speed loss. But only if it would help.
+				if (lastSpeedChangeCountdown < 0.4) {
+					lastSpeedChangeCountdown = 0.4; 				
+				}
 			}
 			handleImpulse(_helperVector);			
 		}
@@ -86,5 +95,9 @@ class Player extends FlxSprite
 	{
 		super.update(elapsed);
 		handleInput();
+		lastSpeedChangeCountdown -= elapsed;
+		if (lastSpeedChangeCountdown < 0) {
+			changeSpeed( -50 * elapsed, true);
+		}
 	}
 }
