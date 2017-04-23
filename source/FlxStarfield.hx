@@ -13,8 +13,6 @@ import flixel.util.FlxSpriteUtil;
 import openfl.geom.Rectangle;
 
 /**
- * TODO:
- * 		Progress Tracker
  * ...
  * @author Zack
  */

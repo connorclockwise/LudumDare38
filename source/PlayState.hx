@@ -130,16 +130,8 @@ class PlayState extends FlxState
 		// objectLayer.add(new Asteroid(100, 50, new FlxPoint(0, FlxG.width/2)));
 		cop = new Cop(50, 50);
 		cop.pursueOn(player);
+		cop.exists = false;
 		objectLayer.add(cop);
-		// objectLayer.add(new Booster(150, 50));
-		// objectLayer.add(new GasCan(200, 50));
-		// objectLayer.add(new Planet(250, 50, 0, 0, "life"));
-		// objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
-		
-		// effectLayer.add(new ExplosionFX(50, 150, 1));
-		// effectLayer.add(new ExplosionFX(120, 150, 2));
-		// effectLayer.add(new ExplosionFX(180, 150, 3));
-		// effectLayer.add(new ExplosionFX(230, 150, 4));
 
 		scoreHud = new ScoreHud();
 		uiLayer.add(scoreHud);
@@ -161,6 +153,10 @@ class PlayState extends FlxState
 		uiLayer.add(new SpeedGague());
 		uiLayer.add(new FuelGague());
 		
+		var progressMeter:ProgressMeter = new ProgressMeter(146, FlxG.height - 15);
+		progressMeter.initialize(homePlanet, player);
+		uiLayer.add(progressMeter);
+		
 		FlxG.camera.setScrollBounds(asteroidBounds.x - asteroidBeltWidth, asteroidBounds.y + asteroidBeltWidth, null, null);
 	}
 
@@ -170,6 +166,10 @@ class PlayState extends FlxState
 		slingShotHud.kill();
 		uiLayer.add(collisionIndicatorHud);
 		player.isGoTime = true;
+		
+		//Start the cop!
+		copSpawnTimer = FlxG.random.float(0.3, 1.5);
+		cop.reset(FlxG.random.float(player.x - 300, player.x + 300), FlxG.random.float(player.y + 400, player.y + 600));
 		
 		#if flash
 		FlxG.sound.playMusic(AssetPaths.loop__mp3, 0.2);
