@@ -35,6 +35,7 @@ class SpeedGague extends FlxSprite
 		speedText.letterSpacing = 1;
 		speedText.scrollFactor.set(0, 0);
 		
+		//Speed needle
 		needle = new FlxSprite(x + width - 35, y + height - 90, AssetPaths.GagueNeedle__png);
 		needle.pixelPerfectRender = false;
 		needle.scrollFactor.set(0, 0);

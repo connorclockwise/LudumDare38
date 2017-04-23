@@ -158,10 +158,9 @@ class PlayState extends FlxState
 		GlobalRegistry.effectLayer = effectLayer;
 		FlxG.watch.add(effectLayer.members, "length", "Explosion Pool Count");
 		
-		var spd:SpeedGague = new SpeedGague();
-		FlxG.watch.add(spd, "x");
-		FlxG.watch.add(spd, "y");
-		uiLayer.add(spd);
+
+		uiLayer.add(new SpeedGague());
+		uiLayer.add(new FuelGague());
 		
 		fuelText = new FlxText(0, FlxG.height - 30, 200, "FUEL: ");
 		fuelText.scrollFactor.set(0, 0);
