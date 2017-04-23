@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 
 class Planet extends FlxSprite{
@@ -10,6 +11,9 @@ class Planet extends FlxSprite{
 	public var _rotationSpeed:Float;
 	public var _reticule:FlxSprite;
 	public var _type:String;
+	public var dying:Bool;
+	public var deathTimer:Float;
+	public var explosionTimer:Float;
 	
 	public function new (x:Float, y:Float, size:Int, rotationSpeed:Float, type:String){
 		super(x, y);
@@ -36,11 +40,43 @@ class Planet extends FlxSprite{
 		_size = size;
 		setGraphicSize(size, size);
 		updateHitbox();
+		dying = false;
+	}
+	
+	override public function kill():Void 
+	{
+		//super.kill();
+		if (!dying) {
+			dying = true;
+			deathTimer = 1.5;
+			explosionTimer = 0.03;
+			triggerExplosion();
+		}
+	}
+	
+	private function triggerExplosion() {
+		var explosionPosition:FlxPoint = new FlxPoint(FlxG.random.float(x, x+width), FlxG.random.float(y, y+height));
+		if (GlobalRegistry.effectLayer.getFirstAvailable(ExplosionFX) != null) {
+			cast(GlobalRegistry.effectLayer.getFirstAvailable(ExplosionFX), ExplosionFX).reset(explosionPosition.x, explosionPosition.y);
+		}else {
+			GlobalRegistry.effectLayer.add(new ExplosionFX(explosionPosition.x, explosionPosition.y));
+		}
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		//angle += _rotationSpeed * elapsed;
+		if (dying) {
+			visible = !visible;
+			deathTimer -= elapsed;
+			explosionTimer -= elapsed;
+			if (explosionTimer < 0) {
+				triggerExplosion();
+				explosionTimer += 0.03;
+			}
+			if (deathTimer < 0) {
+				super.kill();
+			}
+		}
 	}
 }

@@ -44,9 +44,9 @@ class CollisionIndicatorHud extends FlxTypedGroup<FlxSprite>
 		return Std.int(_tempDistance1 - _tempDistance2);
 	}
 
-	public function indicateNearestCollidables(){
+	public function indicateNearestCollidables() {	
 		_alivePlanets = _planets.members.filter(function(_){
-			return _.alive;
+			return _.alive && !cast(_, Planet).dying;
 		});
 		_alivePlanets.sort(sortByPlayerProximity);
 

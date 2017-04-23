@@ -153,6 +153,9 @@ class PlayState extends FlxState
 	public function handleCollision(p:Player, _):Void{
 		if ( Std.is(_, Planet) ) {
 			var planet:Planet = cast (_, Planet);
+			if (planet.dying) {
+				return; //Do nothing if the planet is already in the process of dying.
+			}
 			var planetToPlayer:FlxPoint = new FlxPoint().copyFrom(p.getMidpoint());
 			planetToPlayer.subtractPoint(planet.getMidpoint());
 			planetToPlayer = FlxAngle.getPolarCoords(planetToPlayer.x, planetToPlayer.y);
@@ -190,14 +193,6 @@ class PlayState extends FlxState
 			var resultantVelocity:FlxVector = new FlxVector(p.velocity.x, p.velocity.y);
 			resultantVelocity.rotateByDegrees(angleDiff);
 			p.handleImpulse(resultantVelocity);
-
-			for(i in 0...4){
-				effectLayer.add(new ExplosionFX(
-					planet.x + FlxG.random.float(-planet._size, planet._size),
-					planet.y + FlxG.random.float(-planet._size, planet._size),
-					FlxG.random.int(1,4)
-				));
-			}
 
 			score += 100;
 			var excuseString:String = FlxG.random.getObject([

@@ -22,7 +22,8 @@ class Player extends FlxSprite
 		super(X, Y);
 		loadGraphic(AssetPaths.Junker__png, true, 32, 64);
 		animation.add("pulse", [0, 1, 2, 3, 4], 15);
-		animation.play("pulse");
+		animation.add("off", [5]);
+		animation.play("off");
 		_helperVector = new FlxVector();
 		fuel = 5000;
 		isGoTime = false;
@@ -98,6 +99,11 @@ class Player extends FlxSprite
 		lastSpeedChangeCountdown -= elapsed;
 		if (lastSpeedChangeCountdown < 0) {
 			changeSpeed( -50 * elapsed, true);
+		}
+		if (fuel <= 0) {
+			animation.play("off");
+		}else if(isGoTime) {
+			animation.play("pulse");
 		}
 	}
 }
