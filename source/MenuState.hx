@@ -3,7 +3,6 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.system.FlxSound;
 import flixel.ui.FlxButton;
 
 class MenuState extends FlxState
@@ -13,11 +12,9 @@ class MenuState extends FlxState
 	public var _playButton:FlxButton;
 	public var _helpButton:FlxButton;
 
-	public var introMusic:FlxSound;
-
 	private function gotoPlayState():Void
 	{
-		introMusic.pause();
+		FlxG.sound.music.pause();
 		FlxG.switchState(new PlayState());
 	}
 
@@ -45,9 +42,9 @@ class MenuState extends FlxState
 		add(_helpButton);
 		
 		#if flash
-		introMusic = FlxG.sound.play(AssetPaths.intro__mp3, 0.2);
+		FlxG.sound.playMusic(AssetPaths.intro__mp3, 0.2);
 		#else
-		introMusic = FlxG.sound.play(AssetPaths.intro__ogg, 0.2);
+		FlxG.sound.playMusic(AssetPaths.intro__ogg, 0.2);
 		#end
 	}
 

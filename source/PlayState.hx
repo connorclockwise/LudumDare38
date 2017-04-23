@@ -38,8 +38,6 @@ class PlayState extends FlxState
 	public var boundaryAsteroids:FlxGroup;
 	public var boundaryPosition:Int = 0; //0 is on the left, 1 is on the right.
 	public var asteroidBeltWidth:Float;
-
-	public var loopMusic:FlxSound;
 	
 	public var cop:Cop;
 	public var copSpawnTimer:Float = 3;
@@ -174,10 +172,11 @@ class PlayState extends FlxState
 		player.isGoTime = true;
 		
 		#if flash
-		loopMusic = FlxG.sound.play(AssetPaths.loop__mp3, 0.2);
+		FlxG.sound.playMusic(AssetPaths.loop__mp3, 0.2);
 		#else
-		loopMusic = FlxG.sound.play(AssetPaths.loop__ogg, 0.2);
+		FlxG.sound.playMusic(AssetPaths.loop__ogg, 0.2);
 		#end
+		FlxG.sound.music.persist = false;
 	}
 	
 	function punchPlayer(player:Player, vectorToPlayer:FlxPoint) {
@@ -204,7 +203,7 @@ class PlayState extends FlxState
 			}
 		}
 		if (Std.is(object, Planet)) {
-			if (!cop.dying) {
+			if (!cop.dying && !cast(object, Planet).dying && cast(object, Planet)._type != "home") {
 				cast(object, Planet).kill();
 				cop.kill();
 				
@@ -233,7 +232,7 @@ class PlayState extends FlxState
 				FlxG.camera.flash(FlxColor.WHITE, 1);
 				collisionIndicatorHud.kill();
 				player.kill();
-				loopMusic.pause();
+				FlxG.sound.music.pause();
 				
 				#if flash
 				FlxG.sound.play(AssetPaths.explosion__mp3, 1.6);
@@ -249,7 +248,7 @@ class PlayState extends FlxState
 				new FlxTimer().start(0.5, function(_){
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y + 8, 2));
 				});
-				new FlxTimer().start(3.0, function(_){
+				new FlxTimer().start(3.0, function(_) {
 					FlxG.switchState(new GameOverState(true, score));
 				});
 				return;

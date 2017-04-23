@@ -15,7 +15,6 @@ import openfl.geom.Rectangle;
 /**
  * TODO:
  * 		Progress Tracker
- * 		Police
  * ...
  * @author Zack
  */

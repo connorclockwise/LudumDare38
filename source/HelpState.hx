@@ -15,6 +15,7 @@ class HelpState extends FlxState
 	private function gotoPlayState():Void
 	{
 		FlxG.sound.destroy();
+		FlxG.sound.music.stop();
 		FlxG.switchState(new PlayState());
 	}
 
