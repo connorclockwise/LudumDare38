@@ -28,6 +28,7 @@ class PlayState extends FlxState
 	public var uiLayer:FlxGroup;
 	public var objectLayer:FlxGroup;
 	public var planets:FlxTypedGroup<FlxSprite>;
+	public var collectibles:FlxTypedGroup<FlxSprite>;
 	public var effectLayer:FlxGroup;
 	public var backgroundLayer:FlxGroup;
 
@@ -52,12 +53,13 @@ class PlayState extends FlxState
 		backgroundLayer = new FlxGroup();
 
 		planets = new FlxTypedGroup<FlxSprite>();
+		collectibles = new FlxTypedGroup<FlxSprite>();
 		var position:FlxPoint = new FlxPoint();
 		var size:Int;
 		var rotationSpeed:Float;
 		var planet:Planet;
 		var planetType:String;
-		var numPlanets:Int = 15;
+		var numPlanets:Int = 20;
 		
 		for(i in 0...numPlanets){
 			position.x = Std.int(FlxG.random.float() * levelBounds.x);
@@ -70,6 +72,30 @@ class PlayState extends FlxState
 			planet = new Planet(position.x, position.y, size, rotationSpeed, planetType);
 			planets.add(planet);
 			objectLayer.add(planet);
+		}
+
+		var numGasCans:Int = 2;
+		var gasCan:GasCan;
+
+		for(i in 0...numGasCans){
+			position.x = Std.int(FlxG.random.float() * levelBounds.x);
+			position.y = Std.int((FlxG.random.float(-1, 1) * 40) - (i/numGasCans * levelBounds.y));
+
+			gasCan = new GasCan(position.x, position.y);
+			objectLayer.add(gasCan);
+			collectibles.add(gasCan);
+		}
+
+		var numBoosters:Int = 5;
+		var booster:Booster;
+
+		for(i in 0...numBoosters){
+			position.x = Std.int(FlxG.random.float() * levelBounds.x);
+			position.y = Std.int((FlxG.random.float(-1, 1) * 40) - (i/numBoosters * levelBounds.y));
+
+			booster = new Booster(position.x, position.y);
+			objectLayer.add(booster);
+			collectibles.add(booster);
 		}
 
 		var homePlanet:Planet = new Planet(levelBounds.x / 2, -levelBounds.y - 800, 500, 0, "home");
@@ -121,7 +147,7 @@ class PlayState extends FlxState
 		slingShotHud.launchSignal.addOnce(handleSlingshot);
 		uiLayer.add(slingShotHud);
 
-		collisionIndicatorHud = new CollisionIndicatorHud(player, planets);
+		collisionIndicatorHud = new CollisionIndicatorHud(player, planets, collectibles);
 		
 		add(backgroundLayer);
 		add(objectLayer);
@@ -196,7 +222,7 @@ class PlayState extends FlxState
 
 			score += 100;
 			var excuseString:String = FlxG.random.getObject([
-				"'Accidental Collision'",
+				"Accidental Collision",
 				"I didn't see it.",
 				"*Cough* *Cough*",
 				"Get out my way.",

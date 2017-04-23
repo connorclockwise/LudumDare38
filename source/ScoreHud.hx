@@ -29,9 +29,9 @@ class ScoreHud extends FlxTypedGroup<FlxSprite>
 		_scoreReason.text = reason;
 		if(_tween != null){
 			_tween.cancel();
+			_scoreReason.alpha = 1;
+			_scoreReason.y = 20;
 		}
-		_scoreReason.alpha = 1;
-		_scoreReason.y = 20;
 		_tween = FlxTween.tween(_scoreReason, { alpha: 0, y: 40 }, 2.5, { ease: FlxEase.expoOut});
 	}
 
