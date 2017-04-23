@@ -17,10 +17,12 @@ class GasCan extends FlxSprite
 		loadGraphic(AssetPaths.Fuel_Can__png, true, 32, 32);
 		animation.add("pulse", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 20);
 		animation.play("pulse");
+		scale.set(2, 2);
+		updateHitbox();
 	}
 	
 	public function onCollect(player:Player) {
 		player.fuel += 3000;
-		FlxG.sound.play("assets/sounds/Gascan-Pickup.wav", 0.3, false);
+		FlxG.sound.play("assets/sounds/Gascan-Pickup.wav", 0.6, false);
 	}
 }

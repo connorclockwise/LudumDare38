@@ -17,6 +17,8 @@ class Booster extends FlxSprite
 		loadGraphic(AssetPaths.Booster__png, true, 32, 32);
 		animation.add("pulse", [0, 1, 2, 3, 4], 20);
 		animation.play("pulse");
+		scale.set(2, 2);
+		updateHitbox();
 	}
 	
 	public function onCollect(player:Player) {
