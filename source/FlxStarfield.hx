@@ -14,7 +14,6 @@ import openfl.geom.Rectangle;
 
 /**
  * TODO:
- * 		Drunk drive swaying
  * 		Progress Tracker
  * 		Police
  * ...
