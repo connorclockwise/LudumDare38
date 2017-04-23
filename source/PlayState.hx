@@ -243,13 +243,14 @@ class PlayState extends FlxState
 				#else
 				FlxG.sound.play(AssetPaths.explosion__ogg, 1.6);
 				#end
-				new FlxTimer().start(0.3, function(_){
+				new FlxTimer().start(0.8, function(_){
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y -3, 3));
+					FlxG.sound.play("assets/sounds/Multi-Explosion-Short.wav", 0.4, false);
 				});
-				new FlxTimer().start(0.4, function(_){
+				new FlxTimer().start(0.9, function(_){
 					effectLayer.add(new ExplosionFX(player.x - 10, player.y + 5, 1));
 				});
-				new FlxTimer().start(0.5, function(_){
+				new FlxTimer().start(1, function(_){
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y + 8, 2));
 				});
 				new FlxTimer().start(3.0, function(_) {
@@ -312,6 +313,8 @@ class PlayState extends FlxState
 				copToPlayer.subtractPoint(cast(_, Cop).getMidpoint());
 				copToPlayer = FlxAngle.getPolarCoords(copToPlayer.x, copToPlayer.y);
 				punchPlayer(p, copToPlayer);
+				
+				player.changeSpeed(-25);
 			}
 		}
 	}
