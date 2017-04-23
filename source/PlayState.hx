@@ -22,6 +22,7 @@ class PlayState extends FlxState
 	public var collisionIndicatorHud:CollisionIndicatorHud;
 	
 	public var speedText:FlxText;
+	public var fuelText:FlxText;
 	
 	public var uiLayer:FlxGroup;
 	public var objectLayer:FlxGroup;
@@ -134,6 +135,10 @@ class PlayState extends FlxState
 		speedText = new FlxText(0, 0, 100, "SPEED: ");
 		speedText.scrollFactor.set(0, 0);
 		uiLayer.add(speedText);
+		
+		fuelText = new FlxText(0, 10, 100, "FUEL: ");
+		fuelText.scrollFactor.set(0, 0);
+		uiLayer.add(fuelText);
 	}
 
 	public function handleSlingshot(launchVector:FlxPoint):Void{
@@ -141,6 +146,7 @@ class PlayState extends FlxState
 		player.handleSlingshot(launchVector);
 		slingShotHud.kill();
 		uiLayer.add(collisionIndicatorHud);
+		player.isGoTime = true;
 	}
 
 	public function handleCollision(p:Player, _):Void{
@@ -192,10 +198,24 @@ class PlayState extends FlxState
 				));
 			}
 			planet.kill();
+			player.changeSpeed(-75);
 		}
 		
 		if (Std.is(_, Asteroid)) {
+			if (!cast(_, Asteroid).dying) {
+				player.changeSpeed(-35);				
+			}
 			cast(_, Asteroid).kill();
+		}
+		
+		if (Std.is(_, GasCan)) {
+			cast(_, GasCan).kill();
+			cast(_, GasCan).onCollect(player);
+		}
+		
+		if (Std.is(_, Booster)) {
+			cast(_, Booster).kill();
+			cast(_, Booster).onCollect(player);
 		}
 	}
 
@@ -239,6 +259,16 @@ class PlayState extends FlxState
 				});
 			}
 		}
+		
 		speedText.text = "SPEED: " + Math.floor(new FlxVector(player.velocity.x, player.velocity.y).length);
+		fuelText.text = "FUEL: " + Math.floor(Math.max(player.fuel, 0));
+		
+		if (Math.floor(new FlxVector(player.velocity.x, player.velocity.y).length) == 0 &&
+			Math.floor(Math.max(player.fuel, 0)) == 0) {
+			new FlxTimer().start(3.0, function(_){
+				FlxG.switchState(new GameOverState(false));
+			});				
+		}
+		
 	}
 }

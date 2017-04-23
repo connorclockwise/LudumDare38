@@ -18,4 +18,7 @@ class Booster extends FlxSprite
 		animation.play("pulse");
 	}
 	
+	public function onCollect(player:Player) {
+		player.changeSpeed(300);
+	}
 }

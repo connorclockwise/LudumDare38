@@ -18,4 +18,7 @@ class GasCan extends FlxSprite
 		animation.play("pulse");
 	}
 	
+	public function onCollect(player:Player) {
+		player.fuel += 3000;
+	}
 }
