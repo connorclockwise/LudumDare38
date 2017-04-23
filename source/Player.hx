@@ -66,7 +66,7 @@ class Player extends FlxSprite
 		
 		var velocityMag = FlxAngle.getPolarCoords(velocity.x, velocity.y).x; 
 		var amountToTurn:Float = 1.5 * ( Math.min(velocityMag, 200.0) / 200.0);
-		_helperVector.rotateByDegrees(FlxMath.fastSin(swayCounter) * 3);
+		_helperVector.rotateByDegrees(FlxMath.fastSin(swayCounter) * 1.1);
 	
 		if(FlxG.keys.anyPressed([LEFT, A])){
 			_helperVector.rotateByDegrees(-amountToTurn);
