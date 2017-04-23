@@ -74,12 +74,14 @@ class PlayState extends FlxState
 			objectLayer.add(planet);
 		}
 
-		var numGasCans:Int = 12;
+		var numGasCans:Int = 11;
 		var gasCan:GasCan;
 
 		for(i in 0...numGasCans){
 			position.x = Std.int(FlxG.random.float() * levelBounds.x);
 			position.y = Std.int((FlxG.random.float(-1, 1) * 40) - (i/numGasCans * levelBounds.y));
+
+			
 
 			gasCan = new GasCan(position.x, position.y);
 			objectLayer.add(gasCan);
