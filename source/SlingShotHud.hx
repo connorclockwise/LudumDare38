@@ -6,6 +6,7 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxSignal;
 import flixel.util.FlxTimer;
@@ -19,6 +20,8 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 	public var _reticuleTrail1:FlxSprite;
 	public var _reticuleTrail2:FlxSprite;
 
+	public var _slingshotHelp1:FlxText;
+	public var _slingshotHelp2:FlxText;
 	public var _slingshotStart:FlxPoint;
 	public var _slingshotEnd:FlxPoint;
 	public var _slingShotPointAngle:Float;
@@ -45,6 +48,12 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 		_reticuleTrail2.makeGraphic(4, 4, FlxColor.fromHSL(1, 0.0, 0.25, 1));
 		_player = player;
 
+		_slingshotHelp1 = new FlxText(0, 0, "Drag and release your mouse", 16);
+		_slingshotHelp1.screenCenter();
+		_slingshotHelp1.y = FlxG.height - 24 - 40;
+		_slingshotHelp2 = new FlxText(0, 0, "to slingshot home", 16);
+		_slingshotHelp2.screenCenter();
+		_slingshotHelp2.y = FlxG.height - 24 - 20;
 		_slingshotPointer = new FlxSprite(0,0);
 		_slingshotPointer.loadGraphic(AssetPaths.slingshotArrow__png, true, 20, 80);
 		_slingshotPointer.origin.set(10, 0);
@@ -52,6 +61,8 @@ class SlingShotHud extends FlxTypedGroup<FlxSprite>
 
 		_slingshotTimer = new FlxTimer();
 
+		add(_slingshotHelp1);
+		add(_slingshotHelp2);
 		add(_reticule);
 		add(_reticuleTrail1);
 		add(_reticuleTrail2);
