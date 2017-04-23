@@ -66,7 +66,7 @@ class PlayState extends FlxState
 			size = Std.int(FlxG.random.float(90, 118));
 			rotationSpeed = FlxG.random.float(1, 4) * 100;
 
-			planetType = FlxG.random.getObject(["desert", "lava", "life", "gas1", "gas2"]);
+			planetType = FlxG.random.getObject(["desert", "lava", "gas1", "gas2"]);
 
 			planet = new Planet(position.x, position.y, size, rotationSpeed, planetType);
 			planets.add(planet);
@@ -127,17 +127,17 @@ class PlayState extends FlxState
 		starfield = new FlxStarfield(0, 0, FlxG.width, FlxG.height);
 		backgroundLayer.add(starfield);
 		
-		objectLayer.add(new Asteroid(100, 50, new FlxPoint(0, FlxG.width/2)));
-		objectLayer.add(new Cop(50, 50));
-		objectLayer.add(new Booster(150, 50));
-		objectLayer.add(new GasCan(200, 50));
-		objectLayer.add(new Planet(250, 50, 0, 0, "life"));
-		objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
+		// objectLayer.add(new Asteroid(100, 50, new FlxPoint(0, FlxG.width/2)));
+		// objectLayer.add(new Cop(50, 50));
+		// objectLayer.add(new Booster(150, 50));
+		// objectLayer.add(new GasCan(200, 50));
+		// objectLayer.add(new Planet(250, 50, 0, 0, "life"));
+		// objectLayer.add(new Planet(350, 50, 0, 0, "desert"));
 		
-		effectLayer.add(new ExplosionFX(50, 150, 1));
-		effectLayer.add(new ExplosionFX(120, 150, 2));
-		effectLayer.add(new ExplosionFX(180, 150, 3));
-		effectLayer.add(new ExplosionFX(230, 150, 4));
+		// effectLayer.add(new ExplosionFX(50, 150, 1));
+		// effectLayer.add(new ExplosionFX(120, 150, 2));
+		// effectLayer.add(new ExplosionFX(180, 150, 3));
+		// effectLayer.add(new ExplosionFX(230, 150, 4));
 
 		scoreHud = new ScoreHud();
 		uiLayer.add(scoreHud);

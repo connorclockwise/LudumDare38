@@ -18,6 +18,11 @@ class MenuState extends FlxState
 		FlxG.switchState(new PlayState());
 	}
 
+	private function gotoHelpState():Void
+	{
+		FlxG.switchState(new HelpState());
+	}
+
 	override public function create():Void
 	{
 		super.create();
@@ -28,7 +33,7 @@ class MenuState extends FlxState
 		_playButton.loadGraphic(AssetPaths.driveSafelyButton__png, true, 363, 110);
 		_playButton.screenCenter();
 		_playButton.y += 50;
-		_helpButton = new FlxButton(0, 0, "", gotoPlayState);
+		_helpButton = new FlxButton(0, 0, "", gotoHelpState);
 		_helpButton.loadGraphic(AssetPaths.helpButton__png, true, 336, 117);
 		_helpButton.screenCenter();
 		_helpButton.y += 160;
