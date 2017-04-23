@@ -157,7 +157,7 @@ class PlayState extends FlxState
 		progressMeter.initialize(homePlanet, player);
 		uiLayer.add(progressMeter);
 		
-		FlxG.camera.setScrollBounds(asteroidBounds.x - asteroidBeltWidth, asteroidBounds.y + asteroidBeltWidth, null, null);
+		FlxG.camera.setScrollBounds(asteroidBounds.x - asteroidBeltWidth, asteroidBounds.y + asteroidBeltWidth, null, FlxG.height);
 	}
 
 	public function handleSlingshot(launchVector:FlxPoint):Void{
