@@ -380,7 +380,7 @@ class PlayState extends FlxState
 		if (cop.alive == false) {
 			copSpawnTimer -= elapsed;
 			if (copSpawnTimer <= 0) {
-				copSpawnTimer = FlxG.random.float(0.3, 1.5);
+				copSpawnTimer = FlxG.random.float(2, 5);
 				cop.reset(FlxG.random.float(player.x - 300, player.x + 300), FlxG.random.float(player.y + 400, player.y + 600));
 			}
 		}
