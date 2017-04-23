@@ -18,6 +18,9 @@ class Cop extends FlxSprite
 	public var isSeeking:Bool = false;
 	public var isPursuing:Bool = false;
 	public var seekTarget:FlxSprite;
+	public var MAX_SPEED:Float = 1000;
+	
+	public var seekPoint:FlxSprite;
 
 	public function new(?X:Float=0, ?Y:Float=0) 
 	{
@@ -25,35 +28,57 @@ class Cop extends FlxSprite
 		loadGraphic(AssetPaths.Copper__png, true, 32, 64);
 		animation.add("pulse", [0, 1, 2, 3, 4], 16);
 		animation.play("pulse");
+		
+		seekPoint = new FlxSprite(0, 0);
+		seekPoint.makeGraphic(3, 3);
 	}
 	
 	public function seek(target:FlxSprite):FlxVector {
-		var targetPos:FlxPoint = target.getPosition(null);
+		return seekToAtSpeed(FlxVector.get(target.x, target.y), (cast(FlxVector.get().copyFrom(target.velocity), FlxVector).length + 600));
+	}
+	
+	public function seekToAtSpeed(targetPoint:FlxVector, speed:Float):FlxVector {
+		seekPoint.x = targetPoint.x;
+		seekPoint.y = targetPoint.y;
 		var myPos:FlxPoint = getPosition(null);
-		var targetVec:FlxVector = cast(FlxVector.get().copyFrom(targetPos), FlxVector);
+		var targetVec:FlxVector = cast(FlxVector.get().copyFrom(targetPoint), FlxVector);
 		var myVec:FlxVector = cast(FlxVector.get().copyFrom(myPos), FlxVector);
 		
-		var desiredVelocity:FlxVector = cast(targetVec.subtractPoint(myVec), FlxVector).normalize().scale((cast(FlxVector.get().copyFrom(target.velocity), FlxVector).length + 400));
-		
+		var desiredVelocity:FlxVector = cast(targetVec.subtractPoint(myVec), FlxVector).normalize().scale(MAX_SPEED);
 		//Clean up vector pools.
-		targetPos.put();
+		targetPoint.put();
 		myPos.put();
 		targetVec.put();
 		myVec.put();
-		FlxG.log.add(desiredVelocity);
 		var retVal:FlxVector = cast(desiredVelocity.subtract(velocity.x, velocity.y), FlxVector);
 		forces.push(retVal);
-		FlxG.log.add(retVal);
-		return retVal;
+		return retVal;		
 	}
 	
-	public function pursue(target:FlxSprite) {
+	public function pursue(target:FlxSprite):FlxVector {
 		var targetVelocity:FlxVector = FlxVector.get(target.velocity.x, target.velocity.y);
 		var myVelocity:FlxVector = FlxVector.get(velocity.x, velocity.y);
+		var myPos:FlxVector = FlxVector.get(x, y);
+		var targetPos:FlxVector = FlxVector.get(target.x, target.y);
+		var toTarget:FlxVector = cast(targetPos.subtractNew(myPos), FlxVector);
+		
 		var relativeHeading:Float = myVelocity.normalize().dotProdWithNormalizing(targetVelocity);
 		
+		if (toTarget.dotProduct(myVelocity.normalize()) < 0 && relativeHeading < -0.95) {
+			return seek(target);
+		}
+		
+		var lookAheadTime:Float = toTarget.length / ((targetVelocity.length + 400) + targetVelocity.length);
+		
+		var returnVector:FlxVector = seekToAtSpeed(cast(targetPos.addPoint(targetVelocity.scale(lookAheadTime)), FlxVector), targetVelocity.length + 600);
+		
+		
 		targetVelocity.put();
-		myVelocity.
+		myVelocity.put();
+		toTarget.put();
+		targetPos.put();
+		forces.push(returnVector);
+		return returnVector;
 	}
 	
 	public function seekOn(target:FlxSprite) {
@@ -81,11 +106,22 @@ class Cop extends FlxSprite
 		if (isSeeking) {
 			seek(seekTarget);
 		}
+		if (isPursuing) {
+			pursue(seekTarget);
+		}
 		var newAccel:FlxVector = sumForces();
 		acceleration.copyFrom(newAccel);
 		newAccel.put();
 		
 		angle = FlxVector.get().angleBetween(velocity);
+		
+		seekPoint.update(elapsed);
+	}
+	
+	override public function draw():Void 
+	{
+		super.draw();
+		seekPoint.draw();
 	}
 	
 }
