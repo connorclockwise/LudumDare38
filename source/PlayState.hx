@@ -30,7 +30,7 @@ class PlayState extends FlxState
 
 	public var player:Player;
 
-	public var levelBounds:FlxPoint = new FlxPoint(FlxG.width * 1.1, FlxG.height * 40);
+	public var levelBounds:FlxPoint = new FlxPoint(FlxG.width * 1.1, FlxG.height * 100);
 	
 	public var asteroidBoundarySpacing:Int = 1000;
 	public var asteroidBounds:FlxPoint;
@@ -59,7 +59,7 @@ class PlayState extends FlxState
 		var rotationSpeed:Float;
 		var planet:Planet;
 		var planetType:String;
-		var numPlanets:Int = 30;
+		var numPlanets:Int = 60;
 		
 		for(i in 0...numPlanets){
 			position.x = Std.int(FlxG.random.float() * levelBounds.x);
@@ -74,7 +74,7 @@ class PlayState extends FlxState
 			objectLayer.add(planet);
 		}
 
-		var numGasCans:Int = 3;
+		var numGasCans:Int = 6;
 		var gasCan:GasCan;
 
 		for(i in 0...numGasCans){
@@ -86,7 +86,7 @@ class PlayState extends FlxState
 			collectibles.add(gasCan);
 		}
 
-		var numBoosters:Int = 8;
+		var numBoosters:Int = 12;
 		var booster:Booster;
 
 		for(i in 0...numBoosters){
