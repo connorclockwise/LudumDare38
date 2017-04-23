@@ -91,9 +91,9 @@ class Player extends FlxSprite
 				}
 				_helperVector.length = Math.sqrt(_helperVector.lengthSquared + 1800);
 				//Using fuel doesn't do nearly as much as hitting something for stabilizing speed loss. But only if it would help.
-				//if (lastSpeedChangeCountdown < 0.2) {
-					//lastSpeedChangeCountdown = 0.2; 				
-				//}
+				if (lastSpeedChangeCountdown < 0.05) {
+					lastSpeedChangeCountdown = 0.05; 				
+				}
 
 				if(!_boosterLoop.playing){
 					_boosterLoop.play(false, 0.3);
