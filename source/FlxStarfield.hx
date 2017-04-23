@@ -13,6 +13,10 @@ import flixel.util.FlxSpriteUtil;
 import openfl.geom.Rectangle;
 
 /**
+ * TODO:
+ * 		Drunk drive swaying
+ * 		Progress Tracker
+ * 		Police
  * ...
  * @author Zack
  */
@@ -43,7 +47,7 @@ class FlxStarfield extends FlxSprite
 			starts.push(stars[i].prevPos);
 		}
 		makeGraphic(Std.int(Width), Std.int(Height), 0x0, true);
-		alpha = 0.3;
+		alpha = 0.5;
 		scrollFactor.set(0,0);
 	}
 	

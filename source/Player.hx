@@ -14,7 +14,7 @@ class Player extends FlxSprite
 	public var _helperVector:FlxVector;
 	public var fuel:Float;
 	public var isGoTime:Bool;
-	
+	public var swayCounter:Float;
 	public var lastSpeedChangeCountdown:Float = 2; //2 second countdown from last speed change
 
 	public function new(X:Float, Y:Float) 
@@ -27,6 +27,7 @@ class Player extends FlxSprite
 		_helperVector = new FlxVector();
 		fuel = 5000;
 		isGoTime = false;
+		swayCounter = 0;
 	}
 
 	public function handleImpulse(newVelocity:FlxPoint) {
@@ -64,7 +65,8 @@ class Player extends FlxSprite
 		var _helperVector:FlxVector = new FlxVector(velocity.x, velocity.y);
 		
 		var velocityMag = FlxAngle.getPolarCoords(velocity.x, velocity.y).x; 
-		var amountToTurn:Float = FlxG.random.float(-2, 4) * ( Math.min(velocityMag, 200.0) / 200.0);
+		var amountToTurn:Float = 1.5 * ( Math.min(velocityMag, 200.0) / 200.0);
+		_helperVector.rotateByDegrees(FlxMath.fastSin(swayCounter) * 3);
 	
 		if(FlxG.keys.anyPressed([LEFT, A])){
 			_helperVector.rotateByDegrees(-amountToTurn);
@@ -95,6 +97,10 @@ class Player extends FlxSprite
 	override public function update(elapsed:Float) 
 	{
 		super.update(elapsed);
+		swayCounter += 5 * elapsed;
+		if (swayCounter > Math.PI * 2) {
+			swayCounter -= Math.PI * 2;
+		}
 		handleInput();
 		lastSpeedChangeCountdown -= elapsed;
 		if (lastSpeedChangeCountdown < 0) {
