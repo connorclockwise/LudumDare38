@@ -24,8 +24,6 @@ class PlayState extends FlxState
 	public var slingShotHud:SlingShotHud;
 	public var collisionIndicatorHud:CollisionIndicatorHud;
 	
-	public var fuelText:FlxText;
-	
 	public var uiLayer:FlxGroup;
 	public var objectLayer:FlxGroup;
 	public var planets:FlxTypedGroup<FlxSprite>;
@@ -161,10 +159,6 @@ class PlayState extends FlxState
 
 		uiLayer.add(new SpeedGague());
 		uiLayer.add(new FuelGague());
-		
-		fuelText = new FlxText(0, FlxG.height - 30, 200, "FUEL: ");
-		fuelText.scrollFactor.set(0, 0);
-		uiLayer.add(fuelText);
 		
 		FlxG.camera.setScrollBounds(asteroidBounds.x - asteroidBeltWidth, asteroidBounds.y + asteroidBeltWidth, null, null);
 	}
@@ -304,8 +298,6 @@ class PlayState extends FlxState
 		if (player.x + player.width > asteroidBounds.y + asteroidBeltWidth && player.velocity.x > 0) {
 			player.velocity.x = -player.velocity.x;
 		}
-		
-		fuelText.text = "FUEL: " + Math.floor(Math.max(player.fuel, 0));
 		
 		if (Math.floor(new FlxVector(player.velocity.x, player.velocity.y).length) == 0 &&
 			Math.floor(Math.max(player.fuel, 0)) == 0) {
