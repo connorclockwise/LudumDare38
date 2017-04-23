@@ -17,7 +17,8 @@ class PlayState extends FlxState
 {
 	public var starfield:FlxStarfield;
 
-	public var scoreHud:SlingShotHud;
+	public var scoreHud:ScoreHud;
+	public var score:Int = 0;
 	public var slingShotHud:SlingShotHud;
 	public var collisionIndicatorHud:CollisionIndicatorHud;
 	
@@ -117,6 +118,9 @@ class PlayState extends FlxState
 		effectLayer.add(new ExplosionFX(120, 150, 2));
 		effectLayer.add(new ExplosionFX(180, 150, 3));
 		effectLayer.add(new ExplosionFX(230, 150, 4));
+
+		scoreHud = new ScoreHud();
+		uiLayer.add(scoreHud);
 		
 		slingShotHud = new SlingShotHud(player);
 		slingShotHud.launchSignal.addOnce(handleSlingshot);
@@ -132,7 +136,7 @@ class PlayState extends FlxState
 		GlobalRegistry.effectLayer = effectLayer;
 		FlxG.watch.add(effectLayer.members, "length", "Explosion Pool Count");
 		
-		speedText = new FlxText(0, 0, 100, "SPEED: ");
+		speedText = new FlxText(0, FlxG.height - 20, 100, "SPEED: ", 16);
 		speedText.scrollFactor.set(0, 0);
 		uiLayer.add(speedText);
 		
@@ -197,6 +201,20 @@ class PlayState extends FlxState
 					FlxG.random.int(1,4)
 				));
 			}
+
+			score += 100;
+			var excuseString:String = FlxG.random.getObject([
+				"'Accidental Collision'",
+				"I didn't see it.",
+				"*Cough* *Cough*",
+				"Get out my way.",
+				"Have a nice day.",
+				"Stop being so tiny.",
+				"THIS IS NOT MY DAY.",
+				"That's life friend.",
+				"Somebody get that guy's plate."
+			]);
+			scoreHud.updateScore(score, excuseString);
 			planet.kill();
 			player.changeSpeed(-75);
 		}
