@@ -41,7 +41,7 @@ class GameOverState extends FlxState
 		_playButton.loadGraphic(AssetPaths.playAgainButton__png, true, 239, 65);
 		_playButton.x = 58;
 		_playButton.y = 385;
-		_scoreText = new FlxText(0, 0, "Final Score:" + _score, 24);
+		_scoreText = new FlxText(0, 0, 300, "Final Score:" + _score, 24);
 		_scoreText.x = 48;
 		_scoreText.y = 335;
 		add(_splashScreen);
