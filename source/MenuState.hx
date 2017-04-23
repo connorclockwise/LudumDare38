@@ -11,6 +11,7 @@ class MenuState extends FlxState
 
 	public var _splashScreen:FlxSprite;
 	public var _playButton:FlxButton;
+	public var _helpButton:FlxButton;
 
 	private function gotoPlayState():Void
 	{
@@ -23,11 +24,17 @@ class MenuState extends FlxState
 		_splashScreen = new FlxSprite(0,0);
 		_splashScreen.loadGraphic(AssetPaths.splashScreen__png, false, 450, 200);
 		_splashScreen.screenCenter();
-		_playButton = new FlxButton(0, 0, "Drive Safetly", gotoPlayState);
+		_playButton = new FlxButton(0, 0, "", gotoPlayState);
+		_playButton.loadGraphic(AssetPaths.driveSafelyButton__png, true, 363, 110);
 		_playButton.screenCenter();
 		_playButton.y += 50;
+		_helpButton = new FlxButton(0, 0, "", gotoPlayState);
+		_helpButton.loadGraphic(AssetPaths.helpButton__png, true, 336, 117);
+		_helpButton.screenCenter();
+		_helpButton.y += 160;
 		add(_splashScreen);
 		add(_playButton);
+		add(_helpButton);
 	}
 
 	override public function update(elapsed:Float):Void

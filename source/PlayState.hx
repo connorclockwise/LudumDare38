@@ -200,7 +200,7 @@ class PlayState extends FlxState
 					effectLayer.add(new ExplosionFX(player.x + 5, player.y + 8, 2));
 				});
 				new FlxTimer().start(3.0, function(_){
-					FlxG.switchState(new GameOverState(true));
+					FlxG.switchState(new GameOverState(true, score));
 				});
 				return;
 			}
@@ -302,7 +302,7 @@ class PlayState extends FlxState
 		if (Math.floor(new FlxVector(player.velocity.x, player.velocity.y).length) == 0 &&
 			Math.floor(Math.max(player.fuel, 0)) == 0) {
 			new FlxTimer().start(3.0, function(_){
-				FlxG.switchState(new GameOverState(false));
+				FlxG.switchState(new GameOverState(false, score));
 			});				
 		}
 		
