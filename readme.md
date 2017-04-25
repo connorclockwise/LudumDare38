@@ -3,7 +3,7 @@ In order to build this project you'll have to have a few things installed.
 You'll need HaxeFlixel installed at version 4.2.1. This will force a specific version of OpenFl and Lime on you. The game was compiled with the Haxe compiler at version 3.2.1.
 
 In addition to installing Haxe, and HaxeFlixel - you'll also need to apply a patch to {HAXE_INSTALL}/lib/flixel/4.2.1/flixel/util/FlxSpriteUtil.hx:
-
+```
 /**
 * This function draws a collection of lines on a FlxSprite from starts to ends with the specified color.
 *
@@ -26,3 +26,4 @@ public static function drawBatchLines(sprite:FlxSprite, starts:Array<FlxPoint>, 
 	endDraw(sprite, drawStyle);
 	return sprite;
 }
+```
